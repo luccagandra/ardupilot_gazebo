@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>ardupilot_sitl_gazebo</name>
+  <name>ardupilot_gazebo</name>
   <version>0.1.1</version>
   <description>Ardupilot and Gazebo SITL simulation package</description>
 
