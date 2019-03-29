@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
-project(ardupilot_sitl_gazebo)
+project(ardupilot_gazebo)
 
 
 #######################
@@ -53,12 +53,12 @@ target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})
 add_library(ArduCopterPlugin SHARED src/ArduCopterPlugin.cc)
 target_link_libraries(ArduCopterPlugin ${GAZEBO_LIBRARIES})
 
-#if("${GAZEBO_VERSION}" VERSION_LESS "8.0")
-#    add_library(GimbalSmall2dPlugin SHARED src/GimbalSmall2dPlugin.cc)
-#    target_link_libraries(GimbalSmall2dPlugin ${GAZEBO_LIBRARIES})
-#    install(TARGETS GimbalSmall2dPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
-#endif()
+if("${GAZEBO_VERSION}" VERSION_LESS "8.0")
+    add_library(GimbalSmall2dPlugin SHARED src/GimbalSmall2dPlugin.cc)
+    target_link_libraries(GimbalSmall2dPlugin ${GAZEBO_LIBRARIES})
+    install(TARGETS GimbalSmall2dPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+endif()
 
-#install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
-#install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
-#install(TARGETS ArduCopterPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+install(TARGETS ArduCopterIRLockPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+install(TARGETS ArduPilotPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
+install(TARGETS ArduCopterPlugin DESTINATION ${GAZEBO_PLUGIN_PATH})
