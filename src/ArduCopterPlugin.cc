@@ -31,7 +31,7 @@
 #include <gazebo/msgs/msgs.hh>
 #include <gazebo/sensors/sensors.hh>
 #include <gazebo/transport/transport.hh>
-#include "../include/ArduCopterPlugin.hh"
+#include "include/ArduCopterPlugin.hh"
 
 #define MAX_MOTORS 255
 
