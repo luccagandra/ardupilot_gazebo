@@ -77,6 +77,9 @@ qtcreator-*
 # IntelliJ
 /out/
 
+# Visual studio code
+.vscode
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -96,3 +99,4 @@ cmake-build-debug
 
 # Catkin custom files
 CATKIN_IGNORE
+
