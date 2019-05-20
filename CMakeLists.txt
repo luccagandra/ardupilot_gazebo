@@ -3,6 +3,14 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 project(ardupilot_gazebo)
 
+find_package(catkin REQUIRED COMPONENTS
+roscpp
+rospy
+std_msgs
+dynamic_reconfigure
+sensor_msgs
+uav_ros_control
+mav_msgs)
 
 #######################
 ## Find Dependencies ##
@@ -25,11 +33,13 @@ include_directories(
         ${PROJECT_SOURCE_DIR}
         include
         ${GAZEBO_INCLUDE_DIRS}
+        ${catkin_INCLUDE_DIRS}
         )
 
 link_libraries(
         ${CMAKE_CURRENT_BINARY_DIR}
         ${GAZEBO_LIBRARIES}
+        ${catkin_LIBRARIES}
         )
 
 link_directories(
@@ -48,7 +58,7 @@ add_library(ArduCopterIRLockPlugin SHARED src/ArduCopterIRLockPlugin.cc)
 target_link_libraries(ArduCopterIRLockPlugin ${GAZEBO_LIBRARIES})
 
 add_library(ArduPilotPlugin SHARED src/ArduPilotPlugin.cc)
-target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})
+target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
 
 add_library(ArduCopterPlugin SHARED src/ArduCopterPlugin.cc)
 target_link_libraries(ArduCopterPlugin ${GAZEBO_LIBRARIES})
