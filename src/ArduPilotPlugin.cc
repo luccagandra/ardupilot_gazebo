@@ -90,6 +90,7 @@ std::vector<std::string> getSensorScopedName(physics::ModelPtr _model,
     for (unsigned int j = 0; j < (*iter)->GetSensorCount(); ++j)
     {
         const auto sensorName = (*iter)->GetSensorName(j);
+        gzdbg << sensorName << std::endl;
         if (sensorName.size() < _name.size())
         {
             continue;
@@ -443,7 +444,7 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
   GZ_ASSERT(_model, "ArduPilotPlugin _model pointer is null");
   GZ_ASSERT(_sdf, "ArduPilotPlugin _sdf pointer is null");
-
+  gzdbg << "Hello from ArduPilot" << std::endl;
   this->dataPtr->model = _model;
   this->dataPtr->modelName = this->dataPtr->model->GetName();
 
@@ -692,6 +693,7 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     controlSDF = controlSDF->GetNextElement("control");
   }
 
+  
   // Get sensors
   std::string imuName;
   getSdfParam<std::string>(_sdf, "imuName", imuName, "imu_sensor");
@@ -708,6 +710,12 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     {
       gzwarn << "  sensor " << k << " [" << imuScopedName[k] << "].\n";
     }
+  }
+
+  gzdbg << "Printing sensor names: " << std::endl;
+  for (auto& sensor : sensors::SensorManager::Instance()->GetSensors())
+  {
+    gzdbg << sensor->Name() << std::endl;
   }
 
   if (imuScopedName.size() > 0)
@@ -1206,7 +1214,7 @@ void ArduPilotPlugin::SendState() const
   // copy to pkt
   pkt.imuLinearAccelerationXYZ[0] = linearAccel.X();
   pkt.imuLinearAccelerationXYZ[1] = linearAccel.Y();
-  pkt.imuLinearAccelerationXYZ[2] = linearAccel.Z();
+  pkt.imuLinearAccelerationXYZ[2] = - linearAccel.Z();
   // gzerr << "lin accel [" << linearAccel << "]\n";
 
   // get angular velocity in body frame
