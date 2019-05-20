@@ -100,3 +100,10 @@ cmake-build-debug
 # Catkin custom files
 CATKIN_IGNORE
 
+*.BIN
+*.parm
+*.tlog
+*.raw
+*.TXT
+*.bin
+*.DAT
