@@ -21,6 +21,9 @@
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/physics.hh>
 
+#include <ros/ros.h>
+#include <sensor_msgs/Imu.h>
+
 namespace gazebo
 {
   // Forward declare private data class
@@ -91,6 +94,14 @@ namespace gazebo
 
     /// \brief transform from world frame to NED frame
     private: ignition::math::Pose3d gazeboXYZToNED;
+
+    /// \brief Node handle used for publishing and subscribing
+    private: std::unique_ptr<ros::NodeHandle> nodeHandle;
+
+    public: void ImuCallback(const sensor_msgs::ImuConstPtr&  msg);
+
+    /// \brief Reference to the IMU subscriber,
+    ros::Subscriber imuSub;
   };
 }
 #endif
