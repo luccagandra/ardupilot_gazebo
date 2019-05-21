@@ -911,6 +911,29 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 
   gzlog << "[" << this->dataPtr->modelName << "] "
         << "ArduPilot ready to fly. The force will be with you" << std::endl;
+
+  /*
+   * Do ROS initialization after this point.
+   */
+
+  // Initialize ros, if it has not already bee initialized.
+  if (!ros::isInitialized())
+  {
+    int argc = 0;
+    char **argv = NULL;
+    ros::init(argc, argv, "ardupilot_plugin",
+        ros::init_options::NoSigintHandler);
+  }
+
+  // Create our ROS node. This acts in a similar manner to
+  // the Gazebo node
+  this->nodeHandle.reset(new ros::NodeHandle("gazebo_client"));
+  imuSub = this->nodeHandle->subscribe("/mavros/imu/data", 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
+}
+
+void ArduPilotPlugin::ImuCallback(const sensor_msgs::ImuConstPtr&  msg)
+{
+  gzdbg << "Hello from IMU callback" << std::endl;
 }
 
 /////////////////////////////////////////////////
@@ -996,6 +1019,12 @@ void ArduPilotPlugin::ApplyMotorForces(const double _dt)
         const double error = vel - velTarget;
         const double force = this->dataPtr->controls[i].pid.Update(error, _dt);
         this->dataPtr->controls[i].joint->SetForce(0, force);
+        if (i == 1)
+        {
+          // gzdbg << "TargetVel on joint: " << i << " is: " << velTarget << std::endl;
+          // gzdbg << "Force on joint: " << i << " is: " << force << std::endl;
+        }
+          
       }
       else if (this->dataPtr->controls[i].type == "POSITION")
       {
@@ -1040,6 +1069,8 @@ void ArduPilotPlugin::ApplyMotorForces(const double _dt)
       }
     }
   }
+
+  // gzdbg << std::endl;
 }
 
 /////////////////////////////////////////////////
