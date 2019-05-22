@@ -46,6 +46,8 @@
 #include <gazebo/sensors/sensors.hh>
 #include <gazebo/transport/transport.hh>
 #include "include/ArduPilotPlugin.hh"
+#include <mav_msgs/Actuators.h>
+#include <std_msgs/Header.h>
 
 #define MAX_MOTORS 255
 
@@ -280,6 +282,7 @@ class gazebo::ArduPilotSocketPrivate
   /// \param[in] _address Address to connect to.
   /// \param[in] _port Port to connect to.
   /// \return True on success.
+
   public : bool Connect(const char *_address, const uint16_t _port)
   {
     struct sockaddr_in sockaddr;
@@ -928,12 +931,13 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   // Create our ROS node. This acts in a similar manner to
   // the Gazebo node
   this->nodeHandle.reset(new ros::NodeHandle("gazebo_client"));
-  imuSub = this->nodeHandle->subscribe("/mavros/imu/data", 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
+  imuSub = this->nodeHandle->subscribe("/bebop/imu", 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
+  motorPub = this->nodeHandle->advertise<mav_msgs::Actuators>("/gazebo/command/motor_speed", 1);
 }
 
 void ArduPilotPlugin::ImuCallback(const sensor_msgs::ImuConstPtr&  msg)
 {
-  gzdbg << "Hello from IMU callback" << std::endl;
+  imuMsg = *msg;
 }
 
 /////////////////////////////////////////////////
@@ -1006,71 +1010,15 @@ bool ArduPilotPlugin::InitArduPilotSockets(sdf::ElementPtr _sdf) const
 /////////////////////////////////////////////////
 void ArduPilotPlugin::ApplyMotorForces(const double _dt)
 {
-  // update velocity PID for controls and apply force to joint
-  for (size_t i = 0; i < this->dataPtr->controls.size(); ++i)
-  {
-    if (this->dataPtr->controls[i].useForce)
-    {
-      if (this->dataPtr->controls[i].type == "VELOCITY")
-      {
-        const double velTarget = this->dataPtr->controls[i].cmd /
-          this->dataPtr->controls[i].rotorVelocitySlowdownSim;
-        const double vel = this->dataPtr->controls[i].joint->GetVelocity(0);
-        const double error = vel - velTarget;
-        const double force = this->dataPtr->controls[i].pid.Update(error, _dt);
-        this->dataPtr->controls[i].joint->SetForce(0, force);
-        if (i == 1)
-        {
-          // gzdbg << "TargetVel on joint: " << i << " is: " << velTarget << std::endl;
-          // gzdbg << "Force on joint: " << i << " is: " << force << std::endl;
-        }
-          
-      }
-      else if (this->dataPtr->controls[i].type == "POSITION")
-      {
-        /*const double upper_Lim = this->dataPtr->controls[i].joint->GetUpperLimit(0).Radian();
-        const double lower_Lim = this->dataPtr->controls[i].joint->GetLowerLimit(0).Radian();
-        const double scaler = 5*(upper_Lim - lower_Lim);
-        */
-        const double posTarget = this->dataPtr->controls[i].cmd;
-        const double pos = this->dataPtr->controls[i].joint->Position(0);
-        const double error = pos - posTarget;
-        const double force = this->dataPtr->controls[i].pid.Update(error, _dt);
-        this->dataPtr->controls[i].joint->SetForce(0, force);
-      }
-      else if (this->dataPtr->controls[i].type == "EFFORT")
-      {
-        const double force = this->dataPtr->controls[i].cmd;
-        this->dataPtr->controls[i].joint->SetForce(0, force);
-      }
-      else
-      {
-        // do nothing
-      }
-    }
-    else
-    {
-      if (this->dataPtr->controls[i].type == "VELOCITY")
-      {
-        this->dataPtr->controls[i].joint->SetVelocity(0, this->dataPtr->controls[i].cmd);
-      }
-      else if (this->dataPtr->controls[i].type == "POSITION")
-      {
-        this->dataPtr->controls[i].joint->SetPosition(0, this->dataPtr->controls[i].cmd);
-      }
-      else if (this->dataPtr->controls[i].type == "EFFORT")
-      {
-        const double force = this->dataPtr->controls[i].cmd;
-        this->dataPtr->controls[i].joint->SetForce(0, force);
-      }
-      else
-      {
-        // do nothing
-      }
-    }
-  }
-
-  // gzdbg << std::endl;
+  mav_msgs::Actuators actuatorMsg;
+  actuatorMsg.header.stamp = ros::Time::now();
+  actuatorMsg.angular_velocities = std::vector<double> {
+    this->dataPtr->controls[3].cmd,
+    this->dataPtr->controls[1].cmd, 
+    this->dataPtr->controls[2].cmd,
+    this->dataPtr->controls[0].cmd
+  };
+  motorPub.publish(actuatorMsg);
 }
 
 /////////////////////////////////////////////////
@@ -1239,23 +1187,23 @@ void ArduPilotPlugin::SendState() const
   //   z down
 
   // get linear acceleration in body frame
-  const ignition::math::Vector3d linearAccel =
-    this->dataPtr->imuSensor->LinearAcceleration();
+  // const ignition::math::Vector3d linearAccel =
+  //   this->dataPtr->imuSensor->LinearAcceleration();
 
   // copy to pkt
-  pkt.imuLinearAccelerationXYZ[0] = linearAccel.X();
-  pkt.imuLinearAccelerationXYZ[1] = linearAccel.Y();
-  pkt.imuLinearAccelerationXYZ[2] = - linearAccel.Z();
+  pkt.imuLinearAccelerationXYZ[0] = imuMsg.linear_acceleration.x;
+  pkt.imuLinearAccelerationXYZ[1] = imuMsg.linear_acceleration.y;
+  pkt.imuLinearAccelerationXYZ[2] = - imuMsg.linear_acceleration.z;
   // gzerr << "lin accel [" << linearAccel << "]\n";
 
   // get angular velocity in body frame
-  const ignition::math::Vector3d angularVel =
-    this->dataPtr->imuSensor->AngularVelocity();
+  // const ignition::math::Vector3d angularVel =
+  //  this->dataPtr->imuSensor->AngularVelocity();
 
   // copy to pkt
-  pkt.imuAngularVelocityRPY[0] = angularVel.X();
-  pkt.imuAngularVelocityRPY[1] = angularVel.Y();
-  pkt.imuAngularVelocityRPY[2] = angularVel.Z();
+  pkt.imuAngularVelocityRPY[0] = imuMsg.angular_velocity.x;
+  pkt.imuAngularVelocityRPY[1] = imuMsg.angular_velocity.y;
+  pkt.imuAngularVelocityRPY[2] = imuMsg.angular_velocity.z;
 
   // get inertial pose and velocity
   // position of the uav in world frame

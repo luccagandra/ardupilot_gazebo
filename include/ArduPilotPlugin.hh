@@ -86,6 +86,9 @@ namespace gazebo
     /// \brief Init ardupilot socket
     private: bool InitArduPilotSockets(sdf::ElementPtr _sdf) const;
 
+    /// \brief Imu data callback function
+    public: void ImuCallback(const sensor_msgs::ImuConstPtr&  msg);
+
     /// \brief Private data pointer.
     private: std::unique_ptr<ArduPilotPluginPrivate> dataPtr;
 
@@ -98,10 +101,14 @@ namespace gazebo
     /// \brief Node handle used for publishing and subscribing
     private: std::unique_ptr<ros::NodeHandle> nodeHandle;
 
-    public: void ImuCallback(const sensor_msgs::ImuConstPtr&  msg);
-
     /// \brief Reference to the IMU subscriber,
-    ros::Subscriber imuSub;
+    ros::Subscriber imuSub;   
+
+    /// \brief Rotor velocity publisher
+    ros::Publisher motorPub;
+
+    /// \brief Current IMU message.
+    sensor_msgs::Imu imuMsg;
   };
 }
 #endif
