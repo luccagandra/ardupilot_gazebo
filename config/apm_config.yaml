@@ -92,7 +92,7 @@ setpoint_accel:
 # setpoint_attitude
 setpoint_attitude:
   reverse_thrust: false     # allow reversed thrust
-  use_quaternion: false     # enable PoseStamped topic subscriber
+  use_quaternion: true     # enable PoseStamped topic subscriber
   tf:
     listen: false           # enable tf listener (disable topic subscribers)
     frame_id: "map"
@@ -111,6 +111,11 @@ setpoint_position:
 # setpoint_velocity
 setpoint_velocity:
   mav_frame: LOCAL_NED
+
+setpoint_raw:
+  thrust_scaling: 1.0
+
+thrust_scaling: 1.0
 
 # vfr_hud
 # None
@@ -181,7 +186,7 @@ mocap:
 odometry:
   frame_tf:
     desired_frame: "ned"
-  estimator_type: 3 # check enum MAV_ESTIMATOR_TYPE in <https://mavlink.io/en/messages/common.html>
+  estimator_type: 3 # check enum MAV_ESTIMATOR_TYPE in <http://mavlink.org/messages/common>
 
 # px4flow
 px4flow:
