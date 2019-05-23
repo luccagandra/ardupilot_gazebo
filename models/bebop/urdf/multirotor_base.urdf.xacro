@@ -45,13 +45,16 @@
     </link>
 
     <gazebo reference="imu_link">
-      <gravity>true</gravity>
       <sensor name="imu_sensor" type="imu">
         <always_on>true</always_on>
         <update_rate>50</update_rate>
         <visualize>true</visualize>
         <topic>/bebop/imu</topic>
 
+        <!-- IMU sensor has to be rotated accordint to the NED frame 
+             defined in the ArduPilot plugin -->
+        <pose>0 0 0 3.141593 0 0</pose>
+        
         <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
           <topicName>/bebop/imu</topicName>
           <bodyName>imu_link</bodyName>
@@ -61,8 +64,6 @@
           <rpyOffset>0 0 0</rpyOffset>
           <frameName>imu_link</frameName>
         </plugin>
-        
-        <pose>0 0 0 0 0 0</pose>
       </sensor>
     </gazebo>
 

@@ -1013,10 +1013,10 @@ void ArduPilotPlugin::ApplyMotorForces(const double _dt)
   mav_msgs::Actuators actuatorMsg;
   actuatorMsg.header.stamp = ros::Time::now();
   actuatorMsg.angular_velocities = std::vector<double> {
-    this->dataPtr->controls[3].cmd,
-    this->dataPtr->controls[1].cmd, 
+    this->dataPtr->controls[0].cmd,
     this->dataPtr->controls[2].cmd,
-    this->dataPtr->controls[0].cmd
+    this->dataPtr->controls[1].cmd,
+    this->dataPtr->controls[3].cmd 
   };
   motorPub.publish(actuatorMsg);
 }
@@ -1190,10 +1190,15 @@ void ArduPilotPlugin::SendState() const
   // const ignition::math::Vector3d linearAccel =
   //   this->dataPtr->imuSensor->LinearAcceleration();
 
+  /*
+   * Read linear acceleration and angular velocity from the topic 
+   * published by the Gazebo models IMU plugin.
+   */
+
   // copy to pkt
   pkt.imuLinearAccelerationXYZ[0] = imuMsg.linear_acceleration.x;
   pkt.imuLinearAccelerationXYZ[1] = imuMsg.linear_acceleration.y;
-  pkt.imuLinearAccelerationXYZ[2] = - imuMsg.linear_acceleration.z;
+  pkt.imuLinearAccelerationXYZ[2] = imuMsg.linear_acceleration.z;
   // gzerr << "lin accel [" << linearAccel << "]\n";
 
   // get angular velocity in body frame
