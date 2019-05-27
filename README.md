@@ -92,6 +92,37 @@ Now launch a world file with a copter/rover/plane and ardupilot plugin, and it s
 Launch Ardupilot Software In the Loop Simulation for each vehicle.
 On new terminal, Launch Gazebo with basic demo world.
 
+**BEBOP-LARICS**
+
+* Checkout melodic-devel branch
+
+````bash
+git checkout melodic-devel
+catkin build --this
+````
+
+* Run the following commands (Ardupilot SITl, Bebop-Gazebo, Mavros) in separate terminals
+
+````bash
+sim_vehicle.py -v ArduCopter -f gazebo-iris -m --mav10 --map --console -I0
+roslaunch ardupilot_gazebo bebop.launch
+roslaunch ardupilot_gazebo mavros.launch
+````
+
+* In order to enable increased MAVProxy stream rate enter the following lines in the terminal with Ardupilot SITL
+
+````bash
+set baudrate 921600
+set streamrate 50
+set streamrate2 50
+````
+
+* To increase Mavros topic stream rate in a free terminal type the following
+
+````bash
+rosrun mavros mavsys rate --all 50
+````
+
 **ROVER**
 
 ````
