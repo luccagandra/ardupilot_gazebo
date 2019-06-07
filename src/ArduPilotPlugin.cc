@@ -427,6 +427,12 @@ class gazebo::ArduPilotPluginPrivate
   public: int connectionTimeoutMaxCount;
 
   public: double last_cmd = 150;
+
+  /// \brief topic for publishing sending motor commands
+  public: std::string publishTopicName;
+
+  /// \brief topic for listening to imu sensor data
+  public: std::string subscribeTopicName;
 };
 
 /////////////////////////////////////////////////
@@ -696,6 +702,16 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     controlSDF = controlSDF->GetNextElement("control");
   }
 
+  if (_sdf->HasElement("publishTopicName"))
+  {
+    this->dataPtr->publishTopicName = _sdf->Get<std::string>("publishTopicName");
+  }
+  else this->dataPtr->publishTopicName = "/gazebo/command/motor_speed";
+  if (_sdf->HasElement("subscribeTopicName"))
+  {
+    this->dataPtr->subscribeTopicName = _sdf->Get<std::string>("subscribeTopicName");
+  }
+  else this->dataPtr->subscribeTopicName = "/model/imu";
   
   // Get sensors
   std::string imuName;
@@ -931,8 +947,8 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   // Create our ROS node. This acts in a similar manner to
   // the Gazebo node
   this->nodeHandle.reset(new ros::NodeHandle("gazebo_client"));
-  imuSub = this->nodeHandle->subscribe("/bebop/imu", 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
-  motorPub = this->nodeHandle->advertise<mav_msgs::Actuators>("/gazebo/command/motor_speed", 1);
+  imuSub = this->nodeHandle->subscribe(this->dataPtr->subscribeTopicName, 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
+  motorPub = this->nodeHandle->advertise<mav_msgs::Actuators>(this->dataPtr->publishTopicName, 1);
 }
 
 void ArduPilotPlugin::ImuCallback(const sensor_msgs::ImuConstPtr&  msg)
