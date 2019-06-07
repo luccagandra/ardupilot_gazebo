@@ -429,10 +429,10 @@ class gazebo::ArduPilotPluginPrivate
   public: double last_cmd = 150;
 
   /// \brief topic for publishing sending motor commands
-  public: std::string publishTopicName;
+  public: std::string controlTopicName;
 
   /// \brief topic for listening to imu sensor data
-  public: std::string subscribeTopicName;
+  public: std::string imuTopicName;
 };
 
 /////////////////////////////////////////////////
@@ -702,16 +702,16 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     controlSDF = controlSDF->GetNextElement("control");
   }
 
-  if (_sdf->HasElement("publishTopicName"))
+  if (_sdf->HasElement("controlTopicName"))
   {
-    this->dataPtr->publishTopicName = _sdf->Get<std::string>("publishTopicName");
+    this->dataPtr->controlTopicName = _sdf->Get<std::string>("controlTopicName");
   }
-  else this->dataPtr->publishTopicName = "/gazebo/command/motor_speed";
-  if (_sdf->HasElement("subscribeTopicName"))
+  else this->dataPtr->controlTopicName = "/gazebo/command/motor_speed";
+  if (_sdf->HasElement("imuTopicName"))
   {
-    this->dataPtr->subscribeTopicName = _sdf->Get<std::string>("subscribeTopicName");
+    this->dataPtr->imuTopicName = _sdf->Get<std::string>("imuTopicName");
   }
-  else this->dataPtr->subscribeTopicName = "/model/imu";
+  else this->dataPtr->imuTopicName = "/model/imu";
   
   // Get sensors
   std::string imuName;
@@ -947,8 +947,8 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   // Create our ROS node. This acts in a similar manner to
   // the Gazebo node
   this->nodeHandle.reset(new ros::NodeHandle("gazebo_client"));
-  imuSub = this->nodeHandle->subscribe(this->dataPtr->subscribeTopicName, 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
-  motorPub = this->nodeHandle->advertise<mav_msgs::Actuators>(this->dataPtr->publishTopicName, 1);
+  imuSub = this->nodeHandle->subscribe(this->dataPtr->imuTopicName, 1, &gazebo::ArduPilotPlugin::ImuCallback, this);
+  motorPub = this->nodeHandle->advertise<mav_msgs::Actuators>(this->dataPtr->controlTopicName, 1);
 }
 
 void ArduPilotPlugin::ImuCallback(const sensor_msgs::ImuConstPtr&  msg)
