@@ -117,6 +117,13 @@ set streamrate 50
 set streamrate2 50
 ````
 
+or copy those commands and save them to a file called "mavinit.src". Now those parameters will be automatically loaded 
+if you use the following command
+
+````bash
+sim_vehicle.py -v ArduCopter -f gazebo-iris -m --aircraft="[absolute path to mavinit.src]" --map --console -I0
+````
+
 * To increase Mavros topic stream rate in a free terminal type the following
 
 ````bash
