@@ -16,6 +16,8 @@
 	<arg name="enable_ground_truth" default="true"/>
 	<arg name="enable_velodyne" default="true" />
 	<arg name="model" value="$(find ardupilot_gazebo)/models/bebop/urdf/bebop.urdf.xacro" />
+  <arg name="brick_green" value="$(find ardupilot_gazebo)/models/bebop/urdf/brick_green.urdf"/>
+  <arg name="brick_red" value="$(find ardupilot_gazebo)/models/bebop/urdf/brick_red.urdf"/>
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="paused" value="false" />
@@ -37,6 +39,7 @@
 	  enable_velodyne:=$(arg enable_velodyne)
 	  "
 	/>
+
 	<param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
 	
 	<!-- push robot_description to factory and spawn robot in gazebo -->
@@ -49,6 +52,11 @@
 	       -model $(arg name)"
 	 respawn="false" output="screen" >
 	</node>
+
+  <node name="spawn_brick" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(arg brick_red) -urdf -x 3 -z 0.2 -model brick_red"
+        respawn="false" output="screen"
+  />
 	
 	<group if="$(arg enable_velodyne)">
     
@@ -56,7 +64,15 @@
         <node 
             name="velodyne_transform" pkg="tf" 
             type="static_transform_publisher" 
-            args="0.1 0 0.15 0. 0.1323284641020683 3.141592653589793 $(arg name)/base_link $(arg name)/leddar 100" />
+            args="0.1 0 0.15 0. 0.1323284641020683 3.141592653589793 $(arg name)/base_link $(arg name)/leddar 100"
+        />
+        <node
+            name="camera_transform" pkg="tf"
+            type="static_transform_publisher"
+            args="0.111 0          0.0217
+                  0     1.57079632 0
+                  $(arg name)/base_link $(arg name)/camera 100"
+        />
             
     </group>
     
