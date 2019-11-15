@@ -77,7 +77,14 @@
 		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
 	</xacro:odometry_plugin_macro>
 
-	<xacro:ardupilot>
+	<xacro:ardupilot
+		imu_topic="/bebop/imu"
+		control_topic="/gazebo/command/motor_speed"
+		imu_sensor_name="bebop::imu_link::imu_sensor"
+		rotor_0_joint="bebop::rotor_0_joint"
+		rotor_1_joint="bebop::rotor_1_joint"
+		rotor_2_joint="bebop::rotor_2_joint"
+		rotor_3_joint="bebop::rotor_3_joint">
 	</xacro:ardupilot>
 
     <link name="laser1D_link">

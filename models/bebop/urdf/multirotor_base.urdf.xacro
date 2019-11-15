@@ -145,9 +145,12 @@
 
   </xacro:macro>
    
-  <xacro:macro name="ardupilot">
+  <xacro:macro name="ardupilot" 
+    params="imu_topic control_topic imu_sensor_name rotor_0_joint rotor_1_joint rotor_2_joint rotor_3_joint">
      <gazebo>
         <plugin name="arducopter_plugin" filename="libArduPilotPlugin.so">
+        <imuTopicName>${imu_topic}</imuTopicName>
+        <controlTopicName>${control_topic}</controlTopicName>
         <fdm_addr>127.0.0.1</fdm_addr>
         <fdm_port_in>9002</fdm_port_in>
         <fdm_port_out>9003</fdm_port_out>
@@ -157,8 +160,9 @@
         -->
         <modelXYZToAirplaneXForwardZDown>0 0 0 3.141593 0 0</modelXYZToAirplaneXForwardZDown>
         <gazeboXYZToNED>0 0 0 3.141593 0 0</gazeboXYZToNED>
-        <imuName>bebop::imu_link::imu_sensor</imuName>
+        <imuName>${imu_sensor_name}</imuName>
         <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+        <!-- TODO: Remove this control parameters-->
         <control channel="0">
         <!--
             incoming control command [0, 1]
@@ -176,7 +180,7 @@
           <i_min>0</i_min>
           <cmd_max>3</cmd_max>
           <cmd_min>-3</cmd_min>
-          <jointName>bebop::rotor_1_joint</jointName>
+          <jointName>${rotor_1_joint}</jointName>
           <multiplier>600</multiplier>
           <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
@@ -190,7 +194,7 @@
           <i_min>0</i_min>
           <cmd_max>3</cmd_max>
           <cmd_min>-3</cmd_min>
-          <jointName>bebop::rotor_3_joint</jointName>
+          <jointName>${rotor_3_joint}</jointName>
           <multiplier>600</multiplier>
           <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
@@ -204,7 +208,7 @@
           <i_min>0</i_min>
           <cmd_max>3</cmd_max>
           <cmd_min>-3</cmd_min>
-          <jointName>bebop::rotor_0_joint</jointName>
+          <jointName>${rotor_0_joint}</jointName>
           <multiplier>-600</multiplier>
           <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
@@ -218,7 +222,7 @@
           <i_min>0</i_min>
           <cmd_max>3</cmd_max>
           <cmd_min>-3</cmd_min>
-          <jointName>bebop::rotor_2_joint</jointName>
+          <jointName>${rotor_2_joint}</jointName>
           <multiplier>-600</multiplier>
           <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
