@@ -155,5 +155,6 @@
     <origin xyz="0.111 0 0.0217" rpy="0 1.57079632 0"/>
     <xacro:insert_block name="camera_inertia"/>
   </xacro:cam>
+  
 
 </robot>

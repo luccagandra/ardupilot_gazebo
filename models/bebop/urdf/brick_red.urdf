@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot name="brick_green">
+<robot name="brick_red">
 
   <material name = "Red">
     <color rgba="0.8 0.0 0 1.0"/>
@@ -12,9 +12,9 @@
 
   <link name="base_link">
     <inertial>
-      <origin xyz="0 0 0.5" rpy="0 0 0" />
-      <mass value="1"/>
-      <inertia ixx="100" ixy="0" ixz="0" iyy ="100" iyz = "0" izz = "100" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.01"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy ="0.01" iyz = "0" izz = "0.01" />
     </inertial>
     <visual>
       <geometry>
@@ -33,7 +33,7 @@
   <link name="magnet_patch">
     <visual>
       <geometry>
-        <box size="0.1 0.025 0.001"/>
+        <box size="0.2 0.125 0.001"/>
       </geometry>
       <material name="Gray"/>
     </visual>
@@ -46,7 +46,7 @@
   </link>
 
   <joint name="patch_joint" type="fixed">
-    <origin xyz="0.0 0.0 0.101" rpy="0 0 0"/>
+    <origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="magnet_patch"/>
   </joint>
@@ -58,5 +58,16 @@
     <material>Gazebo/Gray</material>
   </gazebo>
 
+  <gazebo>
+    <plugin name="dipole_magnet" filename="libstorm_gazebo_dipole_magnet.so">
+      <bodyName>magnet_patch</bodyName>
+      <dipole_moment>0 0 1</dipole_moment>
+      <!-- Set to false if not using ROS -->
+      <shouldPublish>true</shouldPublish>
+      <topicNs>magnet</topicNs>
+      <updateRate>100</updateRate>
+      <gain>1.0</gain>
+    </plugin>
+  </gazebo>
+
 </robot>
-    
