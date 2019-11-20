@@ -2,6 +2,7 @@
 
 <launch>
 	<arg name="name" default="bebop"/>
+	<arg name="camera_namespace" default="red"/>
 	<arg name="velodyne_name" default="velodyne_model"/>
 	<arg name="tf_prefix" default="$(arg name)"/>
 	<arg name="x" default="0.0"/>
@@ -16,8 +17,6 @@
 	<arg name="enable_ground_truth" default="true"/>
 	<arg name="enable_velodyne" default="true" />
 	<arg name="model" value="$(find ardupilot_gazebo)/models/bebop/urdf/bebop.urdf.xacro" />
-  <arg name="brick_green" value="$(find ardupilot_gazebo)/models/bebop/urdf/brick_green.urdf"/>
-  <arg name="brick_red" value="$(find ardupilot_gazebo)/models/bebop/urdf/brick_red.urdf"/>
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="paused" value="false" />
@@ -30,6 +29,7 @@
 	  $(find xacro)/xacro --inorder $(arg model)
 	  enable_ground_truth:=$(arg enable_ground_truth)
 	  namespace:=$(arg name)
+	  camera_namespace:=$(arg camera_namespace)
 	  wind_force:=$(arg wind_force)
 	  wind_start:=$(arg wind_start)
 	  wind_duration:=$(arg wind_duration)
@@ -52,11 +52,6 @@
 	       -model $(arg name)"
 	 respawn="false" output="screen" >
 	</node>
-
-  <node name="spawn_brick" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(arg brick_red) -urdf -x 3 -z 0.2 -model brick_red"
-        respawn="false" output="screen"
-  />
 	
 	<node name="camera_transform" pkg="tf" 
 		type="static_transform_publisher" 

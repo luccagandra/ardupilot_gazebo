@@ -162,13 +162,13 @@
 		</inertial>
 		<collision name="collision">
 		<geometry>
-			<cylinder radius="0.09" length="0.035"/>
+			<cylinder radius="0.08" length="0.035"/>
 		</geometry>
 		</collision>
 
 		<visual>
 		<geometry>
-			<cylinder radius="0.09" length="0.035"/>
+			<cylinder radius="0.08" length="0.035"/>
 		</geometry>
 		</visual>
 	</link>
@@ -179,7 +179,7 @@
 			<dipole_moment>0 0 50</dipole_moment>
 			<!-- Set to false if not using ROS -->
 			<shouldPublish>true</shouldPublish>
-			<topicNs>magnet</topicNs>
+			<topicNs>magnet_uav</topicNs>
 			<updateRate>100</updateRate>
 			<gain>1</gain>
 		</plugin>
