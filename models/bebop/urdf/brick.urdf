@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 
-<robot name="brick_red">
+<robot name="$(arg name)_$(arg number)" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <material name = "Red">
+  <xacro:property name="name" value="$(arg name)"/>
+  <xacro:property name="color" value="$(arg color)"/>
+  <xacro:property name="number" value="$(arg number)"/>
+
+  <material name = "${color}">
     <color rgba="0.8 0.0 0 1.0"/>
   </material>
 
@@ -20,7 +24,7 @@
       <geometry>
         <box size="0.3 0.2 0.2"/>
       </geometry>
-      <material name="Red"/>
+      <material name="${color}"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -52,7 +56,7 @@
   </joint>
 
   <gazebo reference="base_link">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/${color}</material>
   </gazebo>
   <gazebo reference="magnet_patch">
     <material>Gazebo/Gray</material>
@@ -64,7 +68,7 @@
       <dipole_moment>0 0 1</dipole_moment>
       <!-- Set to false if not using ROS -->
       <shouldPublish>true</shouldPublish>
-      <topicNs>magnet</topicNs>
+      <topicNs>magnet_${number}</topicNs>
       <updateRate>100</updateRate>
       <gain>1.0</gain>
     </plugin>
