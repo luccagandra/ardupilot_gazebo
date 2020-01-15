@@ -157,7 +157,7 @@
     <!--origin xyz="0.111 0 0.0217" rpy="0 1.57079632 0"/-->
 
     <!-- Side Facing Camera -->
-    <origin xyz="0 0.111 0.0217" rpy="-1.57079632 1.57079632 0"/>
+    <origin xyz="0 0.2 -0.3" rpy="-1.570796 1.570796 0"/>
     
     <xacro:insert_block name="camera_inertia"/>
   </xacro:cam>

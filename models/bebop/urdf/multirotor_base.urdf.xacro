@@ -252,20 +252,18 @@
         </geometry>
       </collision-->
 
-      <!--visual>
+      <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <box size="${camera_link} ${camera_link} ${camera_link}"/>
         </geometry>
         <material name="red"/>
-      </visual-->
+      </visual>
 
       <inertial>
         <mass value="${camera_mass}" />
-        <origin xyz="0 0 0" rpy="0 0 0"/>
         <xacro:insert_block name="inertia"/>
       </inertial>
-
     </link>
 
     <!-- Camera joint with reference to the parent link -->
