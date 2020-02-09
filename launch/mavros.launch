@@ -1,7 +1,9 @@
 <launch>
 	<!-- vim: set ft=xml noet : -->
 	<!-- example launch script for ArduPilot based FCU's -->
+	<arg name="namespace" default="$(env UAV_NAMESPACE)"/>
 	
+	<group ns="$(arg namespace)">
 	<!-- SITL - fcu_url needs to be the outward ip:port of MAVProxy -->
 	<arg name="fcu_url" default="udp://127.0.0.1:14550@14555" />
 	<arg name="gcs_url" default="" />
@@ -23,4 +25,5 @@
         <arg name="fcu_protocol" value="$(arg fcu_protocol)" />
         <arg name="respawn_mavros" default="$(arg respawn_mavros)" />
     </include>
+    </group>
 </launch>
