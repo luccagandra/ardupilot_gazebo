@@ -252,13 +252,13 @@
         </geometry>
       </collision-->
 
-      <visual>
+      <!--visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <box size="${camera_link} ${camera_link} ${camera_link}"/>
         </geometry>
         <material name="red"/>
-      </visual>
+      </visual-->
 
       <inertial>
         <mass value="${camera_mass}" />
@@ -309,8 +309,8 @@
           <depthImageCameraInfoTopicName>/${namespace}/camera/depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>/${namespace}/camera/depth_registered/points</pointCloudTopicName>
           <frameName>camera</frameName>
-          <pointCloudCutoff>0.5</pointCloudCutoff>
-          <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+          <pointCloudCutoff>0.3</pointCloudCutoff>
+          <pointCloudCutoffMax>10.0</pointCloudCutoffMax>
           <distortionK1>0</distortionK1>
           <distortionK2>0</distortionK2>
           <distortionK3>0</distortionK3>
