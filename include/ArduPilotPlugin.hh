@@ -13,102 +13,115 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 #ifndef GAZEBO_PLUGINS_ARDUPILOTPLUGIN_HH_
 #define GAZEBO_PLUGINS_ARDUPILOTPLUGIN_HH_
 
-#include <sdf/sdf.hh>
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/physics.hh>
+#include <sdf/sdf.hh>
 
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
 
-namespace gazebo
+namespace gazebo {
+// Forward declare private data class
+class ArduPilotSocketPrivate;
+class ArduPilotPluginPrivate;
+
+/// \brief Interface ArduPilot from ardupilot stack
+/// modeled after SITL/SIM_*
+///
+/// The plugin requires the following parameters:
+/// <control>             control description block
+///    <!-- inputs from Ardupilot -->
+///    channel            attribute, ardupilot control channel
+///    multiplier         command multiplier
+///    <!-- output to Gazebo -->
+///    type               type of control, VELOCITY, POSITION or EFFORT
+///    <p_gain>           velocity pid p gain
+///    <i_gain>           velocity pid i gain
+///    <d_gain>           velocity pid d gain
+///    <i_max>            velocity pid max integral correction
+///    <i_min>            velocity pid min integral correction
+///    <cmd_max>          velocity pid max command torque
+///    <cmd_min>          velocity pid min command torque
+///    <jointName>        motor joint, torque applied here
+///    <turningDirection> rotor turning direction, 'cw' or 'ccw'
+///    frequencyCutoff    filter incoming joint state
+///    samplingRate       sampling rate for filtering incoming joint state
+///    <rotorVelocitySlowdownSim> for rotor aliasing problem, experimental
+/// <imuName>     scoped name for the imu sensor
+/// <connectionTimeoutMaxCount> timeout before giving up on
+///                             controller synchronization
+class GAZEBO_VISIBLE ArduPilotPlugin : public ModelPlugin
 {
-  // Forward declare private data class
-  class ArduPilotSocketPrivate;
-  class ArduPilotPluginPrivate;
+  /// \brief Constructor.
+public:
+  ArduPilotPlugin();
 
-  /// \brief Interface ArduPilot from ardupilot stack
-  /// modeled after SITL/SIM_*
-  ///
-  /// The plugin requires the following parameters:
-  /// <control>             control description block
-  ///    <!-- inputs from Ardupilot -->
-  ///    channel            attribute, ardupilot control channel
-  ///    multiplier         command multiplier
-  ///    <!-- output to Gazebo -->
-  ///    type               type of control, VELOCITY, POSITION or EFFORT
-  ///    <p_gain>           velocity pid p gain
-  ///    <i_gain>           velocity pid i gain
-  ///    <d_gain>           velocity pid d gain
-  ///    <i_max>            velocity pid max integral correction
-  ///    <i_min>            velocity pid min integral correction
-  ///    <cmd_max>          velocity pid max command torque
-  ///    <cmd_min>          velocity pid min command torque
-  ///    <jointName>        motor joint, torque applied here
-  ///    <turningDirection> rotor turning direction, 'cw' or 'ccw'
-  ///    frequencyCutoff    filter incoming joint state
-  ///    samplingRate       sampling rate for filtering incoming joint state
-  ///    <rotorVelocitySlowdownSim> for rotor aliasing problem, experimental
-  /// <imuName>     scoped name for the imu sensor
-  /// <connectionTimeoutMaxCount> timeout before giving up on
-  ///                             controller synchronization
-  class GAZEBO_VISIBLE ArduPilotPlugin : public ModelPlugin
-  {
-    /// \brief Constructor.
-    public: ArduPilotPlugin();
+  /// \brief Destructor.
+public:
+  ~ArduPilotPlugin();
 
-    /// \brief Destructor.
-    public: ~ArduPilotPlugin();
+  // Documentation Inherited.
+public:
+  virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
 
-    // Documentation Inherited.
-    public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
+  /// \brief Update the control surfaces controllers.
+  /// \param[in] _info Update information provided by the server.
+private:
+  void OnUpdate();
 
-    /// \brief Update the control surfaces controllers.
-    /// \param[in] _info Update information provided by the server.
-    private: void OnUpdate();
+  /// \brief Update PID Joint controllers.
+  /// \param[in] _dt time step size since last update.
+private:
+  void ApplyMotorForces(const double _dt);
 
-    /// \brief Update PID Joint controllers.
-    /// \param[in] _dt time step size since last update.
-    private: void ApplyMotorForces(const double _dt);
+  /// \brief Reset PID Joint controllers.
+private:
+  void ResetPIDs();
 
-    /// \brief Reset PID Joint controllers.
-    private: void ResetPIDs();
+  /// \brief Receive motor commands from ArduPilot
+private:
+  void ReceiveMotorCommand();
 
-    /// \brief Receive motor commands from ArduPilot
-    private: void ReceiveMotorCommand();
+  /// \brief Send state to ArduPilot
+private:
+  void SendState() const;
 
-    /// \brief Send state to ArduPilot
-    private: void SendState() const;
+  /// \brief Init ardupilot socket
+private:
+  bool InitArduPilotSockets(sdf::ElementPtr _sdf) const;
 
-    /// \brief Init ardupilot socket
-    private: bool InitArduPilotSockets(sdf::ElementPtr _sdf) const;
+  /// \brief Imu data callback function
+public:
+  void ImuCallback(const sensor_msgs::ImuConstPtr &msg);
 
-    /// \brief Imu data callback function
-    public: void ImuCallback(const sensor_msgs::ImuConstPtr&  msg);
+  /// \brief Private data pointer.
+private:
+  std::unique_ptr<ArduPilotPluginPrivate> dataPtr;
 
-    /// \brief Private data pointer.
-    private: std::unique_ptr<ArduPilotPluginPrivate> dataPtr;
+  /// \brief transform from model orientation to x-forward and z-up
+private:
+  ignition::math::Pose3d modelXYZToAirplaneXForwardZDown;
 
-    /// \brief transform from model orientation to x-forward and z-up
-    private: ignition::math::Pose3d modelXYZToAirplaneXForwardZDown;
+  /// \brief transform from world frame to NED frame
+private:
+  ignition::math::Pose3d gazeboXYZToNED;
 
-    /// \brief transform from world frame to NED frame
-    private: ignition::math::Pose3d gazeboXYZToNED;
+  /// \brief Node handle used for publishing and subscribing
+private:
+  std::unique_ptr<ros::NodeHandle> nodeHandle;
 
-    /// \brief Node handle used for publishing and subscribing
-    private: std::unique_ptr<ros::NodeHandle> nodeHandle;
+  /// \brief Reference to the IMU subscriber,
+  ros::Subscriber imuSub;
 
-    /// \brief Reference to the IMU subscriber,
-    ros::Subscriber imuSub;   
+  /// \brief Rotor velocity publisher
+  ros::Publisher motorPub;
 
-    /// \brief Rotor velocity publisher
-    ros::Publisher motorPub;
-
-    /// \brief Current IMU message.
-    sensor_msgs::Imu imuMsg;
-  };
-}
+  /// \brief Current IMU message.
+  sensor_msgs::Imu imuMsg;
+};
+}// namespace gazebo
 #endif
