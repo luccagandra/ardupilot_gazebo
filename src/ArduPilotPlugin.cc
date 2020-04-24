@@ -35,7 +35,7 @@ using raw_type = void;
 typedef SSIZE_T ssize_t;
 #endif
 
-#include "include/ArduPilotPlugin.hh"
+#include "ArduPilotPlugin.hh"
 #include <gazebo/common/Assert.hh>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/msgs/msgs.hh>
@@ -49,7 +49,7 @@ typedef SSIZE_T ssize_t;
 #include <string>
 #include <vector>
 
-#define MAX_MOTORS 255
+constexpr auto MAX_MOTORS = 255;
 
 using namespace gazebo;
 
@@ -63,7 +63,7 @@ GZ_REGISTER_MODEL_PLUGIN(ArduPilotPlugin)
 /// \param[in] _verbose If true, gzerror if the parameter is not available.
 /// \return True if the parameter was found in _sdf, false otherwise.
 template<class T>
-bool getSdfParam(sdf::ElementPtr _sdf,
+bool getSdfParam(const sdf::ElementPtr& _sdf,
   const std::string &_name,
   T &_param,
   const T &_defaultValue,
@@ -87,6 +87,7 @@ std::vector<std::string> getSensorScopedName(physics::ModelPtr _model,
   const std::string &_name)
 {
   std::vector<std::string> names;
+  gzdbg << "Available sensor names: \n";
   for (gazebo::physics::Link_V::const_iterator iter = _model->GetLinks().begin();
        iter != _model->GetLinks().end();
        ++iter) {
@@ -222,18 +223,14 @@ public:
   ignition::math::OnePole<double> filter;
 
 public:
-  static double kDefaultRotorVelocitySlowdownSim;
-
-public:
-  static double kDefaultFrequencyCutoff;
-
-public:
-  static double kDefaultSamplingRate;
+  const static double kDefaultRotorVelocitySlowdownSim;
+  const static double kDefaultFrequencyCutoff;
+  const static double kDefaultSamplingRate;
 };
 
-double Control::kDefaultRotorVelocitySlowdownSim = 10.0;
-double Control::kDefaultFrequencyCutoff = 5.0;
-double Control::kDefaultSamplingRate = 0.2;
+const double Control::kDefaultRotorVelocitySlowdownSim = 10.0;
+const double Control::kDefaultFrequencyCutoff = 5.0;
+const double Control::kDefaultSamplingRate = 0.2;
 
 // Private data class
 class gazebo::ArduPilotSocketPrivate
@@ -488,7 +485,7 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
   GZ_ASSERT(_model, "ArduPilotPlugin _model pointer is null");
   GZ_ASSERT(_sdf, "ArduPilotPlugin _sdf pointer is null");
-  gzdbg << "Hello from ArduPilot" << std::endl;
+  gzdbg << "ArduPilotPlugin::Load - Loading ArduPilotPlugin." << std::endl;
   this->dataPtr->model = _model;
   this->dataPtr->modelName = this->dataPtr->model->GetName();
 
@@ -708,11 +705,6 @@ void ArduPilotPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     for (unsigned k = 0; k < imuScopedName.size(); ++k) {
       gzwarn << "  sensor " << k << " [" << imuScopedName[k] << "].\n";
     }
-  }
-
-  gzdbg << "Printing sensor names: " << std::endl;
-  for (auto &sensor : sensors::SensorManager::Instance()->GetSensors()) {
-    gzdbg << sensor->Name() << std::endl;
   }
 
   if (imuScopedName.size() > 0) {
@@ -1060,10 +1052,6 @@ void ArduPilotPlugin::ReceiveMotorCommand()
             << "commands, expected size: " << expectedPktSize << "\n";
     }
     const ssize_t recvChannels = recvSize / sizeof(pkt.motorSpeed[0]);
-    // for(unsigned int i = 0; i < recvChannels; ++i)
-    // {
-    //   gzdbg << "servo_command [" << i << "]: " << pkt.motorSpeed[i] << "\n";
-    // }
 
     if (!this->dataPtr->arduPilotOnline) {
       gzdbg << "[" << this->dataPtr->modelName << "] "
