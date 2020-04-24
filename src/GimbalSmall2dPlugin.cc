@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 #include <string>
 #include <vector>
 
@@ -32,67 +32,70 @@ class gazebo::GimbalSmall2dPluginPrivate
 {
   /// \brief Callback when a command string is received.
   /// \param[in] _msg Mesage containing the command string
-  public: void OnStringMsg(ConstGzStringPtr &_msg);
+public:
+  void OnStringMsg(ConstGzStringPtr &_msg);
 
   /// \brief A list of event connections
-  public: std::vector<event::ConnectionPtr> connections;
+public:
+  std::vector<event::ConnectionPtr> connections;
 
   /// \brief Subscriber to the gimbal command topic
-  public: transport::SubscriberPtr sub;
+public:
+  transport::SubscriberPtr sub;
 
   /// \brief Publisher to the gimbal status topic
-  public: transport::PublisherPtr pub;
+public:
+  transport::PublisherPtr pub;
 
   /// \brief Parent model of this plugin
-  public: physics::ModelPtr model;
+public:
+  physics::ModelPtr model;
 
   /// \brief Joint for tilting the gimbal
-  public: physics::JointPtr tiltJoint;
+public:
+  physics::JointPtr tiltJoint;
 
   /// \brief Command that updates the gimbal tilt angle
-  public: double command = IGN_PI_2;
+public:
+  double command = IGN_PI_2;
 
   /// \brief Pointer to the transport node
-  public: transport::NodePtr node;
+public:
+  transport::NodePtr node;
 
   /// \brief PID controller for the gimbal
-  public: common::PID pid;
+public:
+  common::PID pid;
 
   /// \brief Last update sim time
-  public: common::Time lastUpdateTime;
+public:
+  common::Time lastUpdateTime;
 };
 
 /////////////////////////////////////////////////
-GimbalSmall2dPlugin::GimbalSmall2dPlugin()
-  : dataPtr(new GimbalSmall2dPluginPrivate)
+GimbalSmall2dPlugin::GimbalSmall2dPlugin() : dataPtr(new GimbalSmall2dPluginPrivate)
 {
   this->dataPtr->pid.Init(1, 0, 0, 0, 0, 1.0, -1.0);
 }
 
 /////////////////////////////////////////////////
-void GimbalSmall2dPlugin::Load(physics::ModelPtr _model,
-  sdf::ElementPtr _sdf)
+void GimbalSmall2dPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
   this->dataPtr->model = _model;
 
   std::string jointName = "tilt_joint";
-  if (_sdf->HasElement("joint"))
-  {
-    jointName = _sdf->Get<std::string>("joint");
-  }
+  if (_sdf->HasElement("joint")) { jointName = _sdf->Get<std::string>("joint"); }
   this->dataPtr->tiltJoint = this->dataPtr->model->GetJoint(jointName);
-  if (!this->dataPtr->tiltJoint)
-  {
+  if (!this->dataPtr->tiltJoint) {
     std::string scopedJointName = _model->GetScopedName() + "::" + jointName;
     gzwarn << "joint [" << jointName
-           << "] not found, trying again with scoped joint name ["
-           << scopedJointName << "]\n";
+           << "] not found, trying again with scoped joint name [" << scopedJointName
+           << "]\n";
     this->dataPtr->tiltJoint = this->dataPtr->model->GetJoint(scopedJointName);
   }
-  if (!this->dataPtr->tiltJoint)
-  {
-    gzerr << "GimbalSmall2dPlugin::Load ERROR! Can't get joint '"
-          << jointName << "' " << endl;
+  if (!this->dataPtr->tiltJoint) {
+    gzerr << "GimbalSmall2dPlugin::Load ERROR! Can't get joint '" << jointName << "' "
+          << endl;
   }
 }
 
@@ -102,22 +105,19 @@ void GimbalSmall2dPlugin::Init()
   this->dataPtr->node = transport::NodePtr(new transport::Node());
   this->dataPtr->node->Init(this->dataPtr->model->GetWorld()->Name());
 
-  this->dataPtr->lastUpdateTime =
-    this->dataPtr->model->GetWorld()->SimTime();
+  this->dataPtr->lastUpdateTime = this->dataPtr->model->GetWorld()->SimTime();
 
-  std::string topic = std::string("~/") +  this->dataPtr->model->GetName() +
-    "/gimbal_tilt_cmd";
-  this->dataPtr->sub = this->dataPtr->node->Subscribe(topic,
-      &GimbalSmall2dPluginPrivate::OnStringMsg, this->dataPtr.get());
+  std::string topic =
+    std::string("~/") + this->dataPtr->model->GetName() + "/gimbal_tilt_cmd";
+  this->dataPtr->sub = this->dataPtr->node->Subscribe(
+    topic, &GimbalSmall2dPluginPrivate::OnStringMsg, this->dataPtr.get());
 
   this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
-          std::bind(&GimbalSmall2dPlugin::OnUpdate, this)));
+    std::bind(&GimbalSmall2dPlugin::OnUpdate, this)));
 
-  topic = std::string("~/") +
-    this->dataPtr->model->GetName() + "/gimbal_tilt_status";
+  topic = std::string("~/") + this->dataPtr->model->GetName() + "/gimbal_tilt_status";
 
-  this->dataPtr->pub =
-    this->dataPtr->node->Advertise<gazebo::msgs::GzString>(topic);
+  this->dataPtr->pub = this->dataPtr->node->Advertise<gazebo::msgs::GzString>(topic);
 }
 
 /////////////////////////////////////////////////
@@ -129,19 +129,15 @@ void GimbalSmall2dPluginPrivate::OnStringMsg(ConstGzStringPtr &_msg)
 /////////////////////////////////////////////////
 void GimbalSmall2dPlugin::OnUpdate()
 {
-  if (!this->dataPtr->tiltJoint)
-    return;
+  if (!this->dataPtr->tiltJoint) return;
 
   double angle = this->dataPtr->tiltJoint->Position(0);
 
   common::Time time = this->dataPtr->model->GetWorld()->SimTime();
-  if (time < this->dataPtr->lastUpdateTime)
-  {
+  if (time < this->dataPtr->lastUpdateTime) {
     this->dataPtr->lastUpdateTime = time;
     return;
-  }
-  else if (time > this->dataPtr->lastUpdateTime)
-  {
+  } else if (time > this->dataPtr->lastUpdateTime) {
     double dt = (this->dataPtr->lastUpdateTime - time).Double();
     double error = angle - this->dataPtr->command;
     double force = this->dataPtr->pid.Update(error, dt);
@@ -150,8 +146,7 @@ void GimbalSmall2dPlugin::OnUpdate()
   }
 
   static int i = 1000;
-  if (++i > 100)
-  {
+  if (++i > 100) {
     i = 0;
     std::stringstream ss;
     ss << angle;
