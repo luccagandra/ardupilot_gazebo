@@ -8,9 +8,8 @@
   <license>BSD</license>
 
   <author email="lovro.markovic@fer.hr">Lovro Markovic</author>
-
-  <build_depend>uav_ros_control</build_depend>
   <buildtool_depend>catkin</buildtool_depend>
-  <run_depend>catkin</run_depend>
 
+  <build_depend>mav_msgs</build_depend>
+  <run_depend>mav_msgs</run_depend>
 </package>
