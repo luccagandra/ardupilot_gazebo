@@ -8,10 +8,12 @@ Native Ubuntu Xenial(16.04 LTS) able to run full 3D graphics.
 but, possible solution is here
 
 Type follow in the terminal,
-````
+
+````bash
 echo "export SVGA_VGPU10=0" >> ~/.bashrc
 source ~/.bashrc
 ````
+
 solution retreived from here http://answers.gazebosim.org/question/13214/virtual-machine-not-launching-gazebo/
 
 **Note :** This just enables running gazebo in virtual machine, does not guarantee the performance and Gazebo require much of CPU & GPU processing power depending on what you are running the simulation.
