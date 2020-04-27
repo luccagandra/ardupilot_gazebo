@@ -3,9 +3,10 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- Main multirotor link -->
   <xacro:macro name="multirotor_base_macro"
-    params="robot_namespace mass body_width body_height mesh_file *inertia">
+    params="robot_namespace mass body_width body_height mesh_file mesh_scale *origin *inertia">
     <link name="base_link"></link>
     <joint name="base_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="base_link" />
       <child link="base_link_inertia" />
@@ -20,8 +21,8 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://ardupilot_gazebo/models/bebop/meshes/${mesh_file}"
-            scale="0.001 0.001 0.001" />
+          <mesh filename="package://${mesh_file}"
+            scale="${mesh_scale} ${mesh_scale} ${mesh_scale}" />
           <!-- box size="${body_width} ${body_width} ${body_height}"/ --> <!-- [m] [m] [m] -->
         </geometry>
       </visual>
@@ -29,7 +30,8 @@
       <collision>
         <origin xyz="0 0 0.0" rpy="0 0 0" />
         <geometry>
-          <box size="${body_width} ${body_width} ${body_height}" /> <!-- [m] [m] [m] -->
+          <mesh filename="package://${mesh_file}"
+            scale="${mesh_scale} ${mesh_scale} ${mesh_scale}" /> <!-- [m] [m] [m] -->
         </geometry>
       </collision>
     </link>
@@ -49,20 +51,20 @@
         <always_on>true</always_on>
         <update_rate>50</update_rate>
         <visualize>true</visualize>
-        <topic>/bebop/imu</topic>
+        <topic>/${robot_namespace}/imu</topic>
 
         <!-- IMU sensor has to be rotated accordint to the NED frame 
              defined in the ArduPilot plugin -->
         <pose>0 0 0 3.141593 0 0</pose>
         
         <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-          <topicName>/bebop/imu</topicName>
+          <topicName>/${robot_namespace}/imu</topicName>
           <bodyName>imu_link</bodyName>
           <updateRateHZ>50.0</updateRateHZ>
           <gaussianNoise>0.0</gaussianNoise>
           <xyzOffset>0 0 0</xyzOffset>
           <rpyOffset>0 0 0</rpyOffset>
-          <frameName>bebop/imu</frameName>
+          <frameName>${robot_namespace}/imu</frameName>
         </plugin>
       </sensor>
     </gazebo>
@@ -78,7 +80,7 @@
     <!-- attach multirotor_base_plugin to the base_link -->
     <gazebo>
       <plugin filename="librotors_gazebo_multirotor_base_plugin.so" name="rosbag">
-        <robotNamespace>$(arg namespace)</robotNamespace>
+        <robotNamespace>${robot_namespace}</robotNamespace>
         <linkName>base_link</linkName>
         <rotorVelocitySlowdownSim>${rotor_velocity_slowdown_sim}</rotorVelocitySlowdownSim>
       </plugin>
@@ -108,7 +110,7 @@
       <visual>
         <geometry>
           <!-- <cylinder length="0.005" radius="${radius_rotor}"/> --> <!-- [m] -->
-          <mesh filename="package://ardupilot_gazebo/models/bebop/meshes/propeller_${direction}.dae"
+          <mesh filename="package://ardupilot_gazebo/models/util/propeller_${direction}.dae"
             scale="0.00055 0.00055 0.00055" />
           <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
         </geometry>

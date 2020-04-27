@@ -3,7 +3,8 @@
 <robot name="bebop" xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- Properties -->
   <xacro:property name="rotor_velocity_slowdown_sim" value="15" />
-  <xacro:property name="mesh_file" value="bebop.dae" />
+  <xacro:property name="mesh_file" value="ardupilot_gazebo/models/bebop/meshes/bebop.dae" />
+  <xacro:property name="mesh_scale" value="0.001" />
   <xacro:property name="mass" value="0.5" />  <!-- [kg] tum_sim 1.477 kg -->
   <xacro:property name="body_width" value="0.212" /> <!-- [m] old_value 0.1-->
   <xacro:property name="body_height" value="0.062" /> <!-- [m] -->
@@ -39,7 +40,7 @@
   </xacro:property>
 
   <!-- Included URDF Files -->
-  <xacro:include filename="$(find ardupilot_gazebo)/models/bebop/urdf/multirotor_base.urdf.xacro" />
+  <xacro:include filename="$(find ardupilot_gazebo)/models/util/multirotor_base.urdf.xacro" />
 
   <!-- Instantiate multirotor_base_macro once -->
   <xacro:multirotor_base_macro
@@ -47,7 +48,9 @@
     mass="${mass}"
     body_width="${body_width}"
     body_height="${body_height}"
-    mesh_file="${mesh_file}">
+    mesh_file="${mesh_file}"
+    mesh_scale="${mesh_scale}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <xacro:insert_block name="body_inertia" />
   </xacro:multirotor_base_macro>
 
