@@ -101,7 +101,6 @@ cmake-build-debug
 CATKIN_IGNORE
 
 *.BIN
-*.parm
 *.tlog
 *.raw
 *.TXT
