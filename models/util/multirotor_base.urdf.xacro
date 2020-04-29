@@ -7,7 +7,6 @@
     <link name="base_link"></link>
     <joint name="base_joint" type="fixed">
       <xacro:insert_block name="origin"/>
-      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="base_link" />
       <child link="base_link_inertia" />
     </joint>
@@ -19,7 +18,6 @@
       </inertial>
 
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <mesh filename="package://${mesh_file}"
             scale="${mesh_scale} ${mesh_scale} ${mesh_scale}" />
@@ -28,10 +26,10 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0 0.0" rpy="0 0 0" />
         <geometry>
           <mesh filename="package://${mesh_file}"
             scale="${mesh_scale} ${mesh_scale} ${mesh_scale}" /> <!-- [m] [m] [m] -->
+          <!-- box size="${body_width} ${body_width} ${body_height}"/ --> <!-- [m] [m] [m] -->
         </geometry>
       </collision>
     </link>
@@ -71,7 +69,6 @@
 
     <!-- IMU joint -->
     <joint name="imu_joint" type="revolute">
-      <!--origin xyz="0 0 0" rpy="3.1416 0 0" / -->
       <parent link="base_link" />
       <child link="imu_link" />
       <limit upper="0" lower="0" effort="0" velocity="0" />
@@ -176,28 +173,28 @@
           <offset>0</offset>
           <jointName>${rotor_1_joint}</jointName>
           <multiplier>${thrust_multiplier}</multiplier>
-          <controlVelocitySlowdownSim>30</controlVelocitySlowdownSim>
+          <controlVelocitySlowdownSim>15</controlVelocitySlowdownSim>
         </control>
         <control channel="1">
           <type>VELOCITY</type>
           <offset>0</offset>
           <jointName>${rotor_3_joint}</jointName>
           <multiplier>${thrust_multiplier}</multiplier>
-          <controlVelocitySlowdownSim>30</controlVelocitySlowdownSim>
+          <controlVelocitySlowdownSim>15</controlVelocitySlowdownSim>
         </control>
         <control channel="2">
           <type>VELOCITY</type>
           <offset>0</offset>
           <jointName>${rotor_0_joint}</jointName>
-          <multiplier>-${thrust_multiplier}</multiplier>
-          <controlVelocitySlowdownSim>30</controlVelocitySlowdownSim>
+          <multiplier>${thrust_multiplier}</multiplier>
+          <controlVelocitySlowdownSim>15</controlVelocitySlowdownSim>
         </control>
         <control channel="3">
           <type>VELOCITY</type>
           <offset>0</offset>
           <jointName>${rotor_2_joint}</jointName>
-          <multiplier>-${thrust_multiplier}</multiplier>
-          <controlVelocitySlowdownSim>30</controlVelocitySlowdownSim>
+          <multiplier>${thrust_multiplier}</multiplier>
+          <controlVelocitySlowdownSim>15</controlVelocitySlowdownSim>
         </control>
       </plugin>
     </gazebo>
