@@ -1,96 +1,122 @@
 # Ardupilot Gazebo Plugin & Models
 
-## Requirements :
-Native Ubuntu Xenial(16.04 LTS) able to run full 3D graphics.
+## Requirements
 
-**Note :** Virtual Machine such as VMWare Player does not support full 3D graphics.
+* Ubuntu 18.04 LTS (Bionic Beaver)
+* ROS Melodic
+* Gazebo 9
 
-but, possible solution is here
+## Getting Started
 
-Type follow in the terminal,
+### Installation
 
-````bash
-echo "export SVGA_VGPU10=0" >> ~/.bashrc
+Installation instructions are based on [this](https://ferhr.sharepoint.com/:w:/r/sites/MBZIRC/_layouts/15/doc2.aspx?sourcedoc=%7B78C5C9B0-8300-40D5-892D-6B74EF438451%7D&file=Upute%20za%20instalaciju%20ArdupilotGazeboa.docx&action=default&mobileredirect=true) document. Thanks to [@AnaBatinovic](https://github.com/AnaBatinovic).
+
+#### Various packages
+
+```bash
+pip install -U pymavlink
+pip install -U mavproxy
+sudo apt install libgeographic-dev
+sudo apt install ros-melodic-mavlink
+sudo apt install ros-melodic-mavros ros-melodic-mavros-msgs
+sudo apt install ros-melodic-octomap-ros ros-melodic-joy
+sudo apt install python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev
+sudo apt install git gitk git-gui
+```
+
+#### GeographicLib
+
+```bash
+sudo apt install geographiclib-doc geographiclib-tools libgeographic17 node-geographiclib
+cd /opt/ros/melodic/lib/mavros/
+sudo ./install_geographiclib_datasets.sh
+```
+
+Note: If building Mavros from source locate the *install_geographiclib_datasets.sh* script inside your local Mavros source folder.
+
+#### Ardupilot
+
+```bash
+cd ~/
+git clone https://github.com/ArduPilot/ardupilot.git
+cd ardupilot
+git submodule update --init --recursive
+cd Tools/environment_install
+./install-prereqs-ubuntu.sh -y
+echo "export PATH=$PATH:$HOME/ardupilot/Tools/autotest" >> ~/.bashrc
+echo "export PATH=/usr/lib/ccache:$PATH" >> ~/.bashrc
 source ~/.bashrc
-````
+```
 
-solution retreived from here http://answers.gazebosim.org/question/13214/virtual-machine-not-launching-gazebo/
+For additional information see: [Setting up the Build Environment(Linux/Ubuntu).](https://ardupilot.org/dev/docs/building-setup-linux.html#building-setup-linux)
 
-**Note :** This just enables running gazebo in virtual machine, does not guarantee the performance and Gazebo require much of CPU & GPU processing power depending on what you are running the simulation.
+#### catkin_ws
 
-ArduPilot setup for SITL launch
-Gazebo version 7.x or 8.x  
-The gazebo9 branch will works on gazebo >= 9.x  
+Navigate to your catkin workspace or create it as follows.
 
-## Disclamer :
-This is a playground until I get some time to push the correct patch to gazebo master (I got hard time to work with mercurial..)!  
-So you can expect things to not be up-to-date.  
-This assume that your are using Ubuntu 16.04
+```bash
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws
+catkin init
+catkin config --extend /opt/ros/melodic
+catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
+cd ~/catkin_ws
+catkin build
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
 
-## Repository Structure : 
-**models_gazebo :** Gazebo Original models retrieved from OSRF bitbucket repository (you can find more in https://bitbucket.org/osrf/gazebo_models/src)
+Download and install the following catkin packages.
 
-**models :** Ardupilot SITL compatible models.
+[rotors_simulator](https://github.com/larics/rotors_simulator)
 
-**worlds :** Ardupilot SITL example worlds.
+```bash
+cd ~/catkin_ws/src
+git clone https://github.com/larics/rotors_simulator
+cd rotors_simulator
+git checkout larics_melodic_master
+```
 
-**src :** source files for Gazebo - ArduPilot Plugin
+[mav_comm](https://github.com/larics/mav_comm)
 
-**include :** header files for Gazebo - ArduPilot Plugin
+```bash
+cd ~/catkin_ws/src
+git clone https://github.com/larics/mav_comm
+cd mav_comm
+git checkout larics_master
+```
 
-# Getting Started :
-## How to Install :
-I assume you already have Gazebo 7+ installed with ROS (or without).  
-If you don't have it yet, install ROS with sudo apt install ros-kinetic-desktop-full
-(follow instruction here http://wiki.ros.org/kinetic/Installation/Ubuntu).  
+ardupilot_gazebo
 
-Or install directly gazebo8 from http://gazebosim.org/tutorials?tut=install_ubuntu  
-
-libgazebo7-dev or libgazebo8-dev must be installed.
-
-**For Gazebo 7**
-````
-sudo apt-get install libgazebo7-dev
-````
-OR
-
-**For Gazebo 8**
-````
-sudo apt-get install libgazebo8-dev
-````
-
-**Common :**
-````
-git clone https://github.com/SwiftGust/ardupilot_gazebo
+```bash
+cd ~/catkin_ws/src
+git clone https://github.com/larics/ardupilot_gazebo
 cd ardupilot_gazebo
-mkdir build
-cd build
-cmake ..
-make -j4
-sudo make install
-````
-Set Path of Gazebo Models / Worlds...
-Open up .bashrc
-````
-sudo gedit ~/.bashrc
-````
-Copy & Paste Followings at the end of .bashrc file
-````
-source /usr/share/gazebo/setup.sh
+git checkout larics_master
+echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
+echo "export GAZEBO_MODEL_PATH=~/new_ws/ardupilot_gazebo/models:$GAZEBO_MODEL_PATH" >> ~/.bashrc
+echo "export GAZEBO_PLUGIN_PATH=~/new_ws/build/ardupilot_gazebo:${GAZEBO_PLUGIN_PATH}" >> ~/.bashrc
+source ~/.bashrc
+```
 
-export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models:${GAZEBO_MODEL_PATH}
-export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models_gazebo:${GAZEBO_MODEL_PATH}
-export GAZEBO_RESOURCE_PATH=~/ardupilot_gazebo/worlds:${GAZEBO_RESOURCE_PATH}
-````
+Donwload optional packages:
 
-Install is complete
+* [storm_gazebo_ros_magnet](https://github.com/larics/storm_gazebo_ros_magnet/tree/melodic_electromagnet_dev) - electromagnet plugin
+* [velodyne_simulator](https://github.com/lmark1/velodyne_simulator) - velodyne plugin
 
-Now launch a world file with a copter/rover/plane and ardupilot plugin, and it should work!
-(I will try to add some world file and model later)
+Finally build your catkin workspace.
 
-## HELP
+```bash
+cd ~/catkin_ws
+catkin build
+source ~/.bashrc
+```
 
-### How to Launch :  
+## Help
+
+### How to Launch
+
 Launch Ardupilot Software In the Loop Simulation for each vehicle.
 On new terminal, Launch Gazebo with basic demo world.
 
@@ -134,7 +160,7 @@ rosrun mavros mavsys rate --all 50
 
 **ROVER**
 
-````
+````bash
 On 1st Terminal(Launch Ardupilot SITL)
 sim_vehicle.py -v APMrover2 -f gazebo-rover  -m --mav10 --map --console -I1
 
@@ -142,8 +168,10 @@ On 2nd Termianal(Launch Gazebo with differential drive Rover model, Retrieved fr
 gazebo --verbose rover_ardupilot.world
 
 ````
+
 **COPTER (3DR IRIS)**
-````
+
+````bash
 On 1st Terminal(Launch Ardupilot SITL)
 sim_vehicle.py -v ArduCopter -f gazebo-iris  -m --mav10 --map --console -I0
 
@@ -152,7 +180,8 @@ gazebo --verbose iris_ardupilot.world
 ````
 
 **PLANE**
-````
+
+````bash
 On 1st Terminal(Launch Ardupilot SITL)
 sim_vehicle.py -v ArduPlane -f gazebo-zephyr  -m --mav10 --map --console -I0
 
