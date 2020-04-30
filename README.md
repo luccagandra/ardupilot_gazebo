@@ -6,13 +6,11 @@
 * ROS Melodic
 * Gazebo 9
 
-## Getting Started
+## Installation
 
-### Installation
+Installation instructions are based on [this](https://docs.google.com/document/d/1CIObvL-HHYCosqRLb9j_OIzAPuPPpV2wvajG1nY-UlY/edit?usp=sharing) document. Special thanks to [@AnaBatinovic](https://github.com/AnaBatinovic).
 
-Installation instructions are based on [this](https://ferhr.sharepoint.com/:w:/r/sites/MBZIRC/_layouts/15/doc2.aspx?sourcedoc=%7B78C5C9B0-8300-40D5-892D-6B74EF438451%7D&file=Upute%20za%20instalaciju%20ArdupilotGazeboa.docx&action=default&mobileredirect=true) document. Thanks to [@AnaBatinovic](https://github.com/AnaBatinovic).
-
-#### Various packages
+### Various packages
 
 ```bash
 pip install -U pymavlink
@@ -25,7 +23,7 @@ sudo apt install python-wstool python-catkin-tools protobuf-compiler libgoogle-g
 sudo apt install git gitk git-gui
 ```
 
-#### GeographicLib
+### GeographicLib
 
 ```bash
 sudo apt install geographiclib-doc geographiclib-tools libgeographic17 node-geographiclib
@@ -35,7 +33,7 @@ sudo ./install_geographiclib_datasets.sh
 
 Note: If building Mavros from source locate the *install_geographiclib_datasets.sh* script inside your local Mavros source folder.
 
-#### Ardupilot
+### Ardupilot
 
 ```bash
 cd ~/
@@ -51,7 +49,7 @@ source ~/.bashrc
 
 For additional information see: [Setting up the Build Environment(Linux/Ubuntu).](https://ardupilot.org/dev/docs/building-setup-linux.html#building-setup-linux)
 
-#### catkin_ws
+### Catkin workspace setup
 
 Navigate to your catkin workspace or create it as follows.
 
@@ -87,7 +85,7 @@ cd mav_comm
 git checkout larics_master
 ```
 
-ardupilot_gazebo
+[ardupilot_gazebo](https://github.com/larics/ardupilot_gazebo)
 
 ```bash
 cd ~/catkin_ws/src
@@ -95,15 +93,15 @@ git clone https://github.com/larics/ardupilot_gazebo
 cd ardupilot_gazebo
 git checkout larics_master
 echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
-echo "export GAZEBO_MODEL_PATH=~/new_ws/ardupilot_gazebo/models:$GAZEBO_MODEL_PATH" >> ~/.bashrc
-echo "export GAZEBO_PLUGIN_PATH=~/new_ws/build/ardupilot_gazebo:${GAZEBO_PLUGIN_PATH}" >> ~/.bashrc
+echo "export GAZEBO_MODEL_PATH=~/catkin_ws/ardupilot_gazebo/models:$GAZEBO_MODEL_PATH" >> ~/.bashrc
+echo "export GAZEBO_PLUGIN_PATH=~/catkin_ws/build/ardupilot_gazebo:${GAZEBO_PLUGIN_PATH}" >> ~/.bashrc
 source ~/.bashrc
 ```
 
 Donwload optional packages:
 
-* [storm_gazebo_ros_magnet](https://github.com/larics/storm_gazebo_ros_magnet/tree/melodic_electromagnet_dev) - electromagnet plugin
-* [velodyne_simulator](https://github.com/lmark1/velodyne_simulator) - velodyne plugin
+* [storm_gazebo_ros_magnet](https://github.com/larics/storm_gazebo_ros_magnet/tree/melodic_electromagnet_dev) - electromagnet plugin for Gazebo
+* [velodyne_simulator](https://github.com/lmark1/velodyne_simulator) - velodyne plugin for Gazebo
 
 Finally build your catkin workspace.
 
@@ -113,79 +111,47 @@ catkin build
 source ~/.bashrc
 ```
 
-## Help
+## Simulation Startup
 
-### How to Launch
+**Note**: Make sure that you start the *sim_vehicle.py* script for each vehicle from their respective folder.
 
-Launch Ardupilot Software In the Loop Simulation for each vehicle.
-On new terminal, Launch Gazebo with basic demo world.
+### Bebop
 
-**BEBOP-LARICS**
-
-* Checkout melodic-devel branch
+Run the following commands (Arducopter SITl, Bebop-Gazebo, Mavros) in separate terminals
 
 ````bash
-git checkout melodic-devel
-catkin build --this
-````
-
-* Run the following commands (Ardupilot SITl, Bebop-Gazebo, Mavros) in separate terminals
-
-````bash
-sim_vehicle.py -v ArduCopter -f gazebo-iris -m --mav10 --map --console -I0
+sim_vehicle.py -v ArduCopter -f gazebo-iris -m --mav10 --console --map -I0 -m --streamrate=50
 roslaunch ardupilot_gazebo bebop.launch
 roslaunch ardupilot_gazebo mavros.launch
 ````
 
-* In order to enable increased MAVProxy stream rate enter the following lines in the terminal with Ardupilot SITL
+### Rover
 
 ````bash
-set baudrate 921600
-set streamrate 50
-set streamrate2 50
-````
-
-or copy those commands and save them to a file called "mavinit.src". Now those parameters will be automatically loaded 
-if you use the following command
-
-````bash
-sim_vehicle.py -v ArduCopter -f gazebo-iris -m --aircraft="[absolute path to mavinit.src]" --map --console -I0
-````
-
-* To increase Mavros topic stream rate in a free terminal type the following
-
-````bash
-rosrun mavros mavsys rate --all 50
-````
-
-**ROVER**
-
-````bash
-On 1st Terminal(Launch Ardupilot SITL)
+# On 1st Terminal(Launch Ardupilot SITL)
 sim_vehicle.py -v APMrover2 -f gazebo-rover  -m --mav10 --map --console -I1
 
-On 2nd Termianal(Launch Gazebo with differential drive Rover model, Retrieved from Husky Model)
+# On 2nd Termianal(Launch Gazebo with differential drive Rover model, Retrieved from Husky Model)
 gazebo --verbose rover_ardupilot.world
-
 ````
 
-**COPTER (3DR IRIS)**
+### 3DR IRIS Copter
 
 ````bash
-On 1st Terminal(Launch Ardupilot SITL)
+# On 1st Terminal(Launch Ardupilot SITL)
 sim_vehicle.py -v ArduCopter -f gazebo-iris  -m --mav10 --map --console -I0
 
-On 2nd Terminal(Launch Gazebo with demo 3DR Iris model)
+# On 2nd Terminal(Launch Gazebo with demo 3DR Iris model)
 gazebo --verbose iris_ardupilot.world
 ````
 
-**PLANE**
+### Plane
 
 ````bash
-On 1st Terminal(Launch Ardupilot SITL)
+# On 1st Terminal(Launch Ardupilot SITL)
 sim_vehicle.py -v ArduPlane -f gazebo-zephyr  -m --mav10 --map --console -I0
 
-On 2nd Terminal(Launch Gazebo with demo Zephyr flying wing model)
+# On 2nd Terminal(Launch Gazebo with demo Zephyr flying wing model)
 gazebo --verbose zephyr_ardupilot_demo.world
 ````
 
