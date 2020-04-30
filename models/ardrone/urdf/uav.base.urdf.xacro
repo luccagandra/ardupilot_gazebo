@@ -110,7 +110,7 @@
     motor_number="0"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Red">
+    color="Blue">
     <!--<origin xyz="${cos45*arm_length} ${sin45*arm_length} ${rotor_offset_top}" rpy="0 0 0" />-->
     <origin xyz="${1*arm_length} ${0*arm_length} ${rotor_offset_top}" rpy="0 ${-tilt_angle} 0" />
     <xacro:insert_block name="rotor_inertia" />
@@ -131,7 +131,7 @@
     motor_number="3"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Blue">
+    color="Red">
     <!--<origin xyz="${cos45*arm_length} ${-sin45*arm_length} ${rotor_offset_top}" rpy="0 0 0" />-->
     <origin xyz="${0*arm_length} ${-1*arm_length} ${rotor_offset_top}" rpy="${-tilt_angle} 0 0" />
     <xacro:insert_block name="rotor_inertia" />
@@ -152,7 +152,7 @@
     motor_number="1"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Blue">
+    color="Red">
     <!--<origin xyz="${-cos45*arm_length} ${sin45*arm_length} ${rotor_offset_top}" rpy="0 0 0" />-->
     <origin xyz="${0*arm_length} ${1*arm_length} ${rotor_offset_top}" rpy="${tilt_angle} 0 0" />
     <xacro:insert_block name="rotor_inertia" />
@@ -173,7 +173,7 @@
     motor_number="2"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Red">
+    color="Blue">
     <!--<origin xyz="${-cos45*arm_length} ${-sin45*arm_length} ${rotor_offset_top}" rpy="0 0 0" />-->
     <origin xyz="${-1*arm_length} ${0*arm_length} ${rotor_offset_top}" rpy="0 ${tilt_angle} 0" />
     <xacro:insert_block name="rotor_inertia" />
