@@ -8,15 +8,9 @@
 	<arg name="x" default="0.0"/>
 	<arg name="y" default="0.0"/>
 	<arg name="z" default="0.031"/>
-	<arg name="wind_force" default="0.0"/>
-	<arg name="wind_start" default="0.0"/>
-	<arg name="wind_duration" default="0.0"/>
-	<arg name="wind_direction_x" default="0.0"/>
-	<arg name="wind_direction_y" default="0.0"/>
-	<arg name="wind_direction_z" default="0.0"/>
 	<arg name="enable_ground_truth" default="true"/>
-	<arg name="enable_velodyne" default="true" />
-	<arg name="enable_magnet" default="true" />
+	<arg name="enable_velodyne" default="false" />
+	<arg name="enable_magnet" default="false" />
 	<arg name="model" value="$(find ardupilot_gazebo)/models/bebop/urdf/bebop.urdf.xacro" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -31,12 +25,6 @@
 	  enable_ground_truth:=$(arg enable_ground_truth)
 	  namespace:=$(arg name)
 	  camera_namespace:=$(arg camera_namespace)
-	  wind_force:=$(arg wind_force)
-	  wind_start:=$(arg wind_start)
-	  wind_duration:=$(arg wind_duration)
-	  wind_direction_x:=$(arg wind_direction_x)
-	  wind_direction_y:=$(arg wind_direction_y)
-	  wind_direction_z:=$(arg wind_direction_z)
 	  enable_velodyne:=$(arg enable_velodyne)
 		enable_magnet:=$(arg enable_magnet)
 	  "
