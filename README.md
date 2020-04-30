@@ -117,11 +117,31 @@ source ~/.bashrc
 
 ### Bebop
 
-Run the following commands (Arducopter SITl, Bebop-Gazebo, Mavros) in separate terminals
+````bash
+# 1st terminal
+mkdir -p ~/bebop_startup
+cd ~/bebop_startup
+sim_vehicle.py -v ArduCopter -f gazebo-iris -m --mav10 --console --map -I0 -m --streamrate=50
+
+# 2nd terminal
+roslaunch ardupilot_gazebo bebop.launch
+
+# 3rd terminal
+roslaunch ardupilot_gazebo mavros.launch
+````
+
+### Ardrone
 
 ````bash
+# 1st terminal
+mkdir -p ~/bebop_startup
+cd ~/bebop_startup
 sim_vehicle.py -v ArduCopter -f gazebo-iris -m --mav10 --console --map -I0 -m --streamrate=50
-roslaunch ardupilot_gazebo bebop.launch
+
+# 2nd terminal
+roslaunch ardupilot_gazebo ardrone.launch
+
+# 3rd terminal
 roslaunch ardupilot_gazebo mavros.launch
 ````
 
@@ -155,30 +175,74 @@ sim_vehicle.py -v ArduPlane -f gazebo-zephyr  -m --mav10 --map --console -I0
 gazebo --verbose zephyr_ardupilot_demo.world
 ````
 
-In addition, you can use any GCS that can connect to the Ardupilot locally or remotely(will require connection setup).
-If MAVProxy Developer GCS is uncomfortable. Omit --map --console arguments out of SITL launch.
+## Simulation and MAVProxy commands
 
-And use APMPlanner2 or QGroundControl instead.
-(Possibly MissionPlanner but require Windows PC)
+Various MAVProxy commands can be found in [UAV Configuration - MAVProxy](https://ardupilot.github.io/MAVProxy/html/uav_configuration/index.html).
+
+### Streamrate
+
+In order to enable increased MAVProxy stream rate enter the following in the MavProxy command line.
+
+````bash
+set baudrate 921600
+set streamrate 50
+set streamrate2 50
+````
+
+Those commands can be saved to a file called "mavinit.src". They will be automatically executed if you use the following command
+
+````bash
+sim_vehicle.py -v ArduCopter -f gazebo-iris -m --aircraft="[absolute path to mavinit.src]" --map --console -I0
+````
+
+To increase Mavros topic stream rate enter the following command.
+
+````bash
+rosrun mavros mavsys rate --all 50
+````
+
+### Takeoff commands
+
+This section concerns UAV simulations.
+
+When messages:
+
+* EKF1 is using GPS
+* EKF2 is using GPS
+
+appear then execute the following command in the MAVProxy command line.
+
+```bash
+rc 3 1500
+mode guided
+arm throttle
+takeoff 3
+```
+
+## GCS
+
+In addition, you can use any GCS that can connect to the Ardupilot locally or remotely(will require connection setup).
+If MAVProxy Developer GCS is uncomfortable. Omit --map --console arguments out of SITL launch and use APMPlanner2 or QGroundControl instead.
 
 Local connection with APMPlanner2/QGroundControl is automatic, and easier to use.
 
-For APMPlanner2
+You will also need to edit ArduPilot Parameter SYSID_THISMAV to be unique from one another for the GCS connection
 
-Download it from here http://firmware.eu.ardupilot.org/Tools/APMPlanner/
+### APMPlanner2
+
+Download it from [here](http://firmware.eu.ardupilot.org/Tools/APMPlanner/)
 and launch it in terminal or run executable
 
-````
+```bash
 apmplanner2
-````
+```
 
-For QGroundControl
+### QGroundControl
 
-Download it from here and follow the installation guide.
-
-https://donlakeflyer.gitbooks.io/qgroundcontrol-user-guide/en/download_and_install.html
+Download it from [here](https://donlakeflyer.gitbooks.io/qgroundcontrol-user-guide/en/download_and_install.html) and follow the installation guide.
 
 ## Multi-Vehicle simulation
+
 This section explains how to connect any combination of multi-vehicles of ArduPilot
 
 For the multi-vehicle connection, port number is increased by 10 per instance(#)
@@ -193,9 +257,6 @@ In SITL launch argument -I # of sim_vehicle.py
 and so on...
 
 You will need to edit your world for any combination of Rover, Plane, Copter, etc...
-
-Additional Note for GCS Connection
-You will also need to edit ArduPilot Parameter SYSID_THISMAV to be unique from one another for the GCS connection
 
 ### Example
 Look simulation of 3 IRIS quadcopter at once from Jonathan Lopes Florêncio
