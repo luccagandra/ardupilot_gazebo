@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<robot name="kopterworx" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="namespace" value="$(arg namespace)" />
+
+  <!-- Instantiate bebop "mechanics" -->
+	<xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_base.urdf.xacro" />
+  <xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />
+	
+</robot>
