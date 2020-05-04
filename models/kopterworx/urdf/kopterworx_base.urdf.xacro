@@ -22,17 +22,17 @@
   <!-- Rotor constants -->
   <xacro:property name="mass_rotor" value="0.01" /> <!-- [kg] -->
   <xacro:property name="radius_rotor" value="0.285" /> <!-- [m] -->
-  <xacro:property name="motor_constant" value="8.54858e-06" /> <!-- [kg*m/s^2] -->
+  <xacro:property name="motor_constant" value="0.00024407246" /> <!-- [kg*m/s^2] -->
   <xacro:property name="moment_constant" value="0.016" /> <!-- [m] -->
   <xacro:property name="time_constant_up" value="0.0125" /> <!-- [s] -->
   <xacro:property name="time_constant_down" value="0.0125" /> <!-- [s] -->
-  <xacro:property name="max_rot_velocity" value="1475" /> <!-- [rad/s] -->
+  <xacro:property name="max_rot_velocity" value="600" /> <!-- [rad/s] -->
   <xacro:property name="rotor_drag_coefficient" value="8.06428e-05" />
   <xacro:property name="rolling_moment_coefficient" value="0.000001" />
 
   <!-- Property Blocks -->
   <xacro:property name="body_inertia">  
-    <inertia ixx="0.00389" ixy="0.0" ixz="0.0" iyy="0.00389" iyz="0.0" izz="0.0078" />
+    <inertia ixx="0.274253" ixy="0.0" ixz="0.0" iyy="0.274253" iyz="0.0" izz="0.469118" />
   </xacro:property>
 
   <!-- inertia of a single rotor, assuming it is a cuboid. Height=3mm, width=15mm -->
