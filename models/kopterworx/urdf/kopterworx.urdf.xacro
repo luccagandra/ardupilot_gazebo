@@ -8,4 +8,15 @@
 	<xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_base.urdf.xacro" />
   <xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />
 	
+  	<xacro:ardupilot
+		imu_topic="/kopterworx/imu"
+		control_topic="/gazebo/command/motor_speed"
+		imu_sensor_name="kopterworx::imu_link::imu_sensor"
+		rotor_0_joint="kopterworx::rotor_0_joint"
+		rotor_1_joint="kopterworx::rotor_1_joint"
+		rotor_2_joint="kopterworx::rotor_2_joint"
+		rotor_3_joint="kopterworx::rotor_3_joint"
+		thrust_multiplier="600">
+	</xacro:ardupilot>
+
 </robot>
