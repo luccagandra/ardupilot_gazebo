@@ -155,6 +155,21 @@ sim_vehicle.py -v APMrover2 -f gazebo-rover  -m --mav10 --map --console -I1
 gazebo --verbose rover_ardupilot.world
 ````
 
+### Kopterworx
+
+````bash
+# 1st terminal
+mkdir -p ~/kopter_startup
+cd ~/kopter_startup
+sim_vehicle.py -v ArduCopter --add-param-file=$HOME/catkin_ws/src/ardupilot_gazebo/config/kopterworx_red.parm -f gazebo-iris -m --mav10 --console -I0 -m --streamrate=50
+
+# 2nd terminal
+roslaunch ardupilot_gazebo kopterworx.launch
+
+# 3rd terminal
+roslaunch ardupilot_gazebo mavros.launch
+````
+
 ### 3DR IRIS Copter
 
 ````bash
