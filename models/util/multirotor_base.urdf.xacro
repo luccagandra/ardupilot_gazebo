@@ -35,9 +35,9 @@
 
       <visual>
         <geometry>
-          <!-- mesh filename="package://${mesh_file}"
-            scale="${mesh_scale} ${mesh_scale} ${mesh_scale}" /-->
-          <box size="${body_width} ${body_width} ${body_height}"/> <!-- [m] [m] [m] -->
+          <mesh filename="package://${mesh_file}"
+            scale="${mesh_scale} ${mesh_scale} ${mesh_scale}" />
+          <!--box size="${body_width} ${body_width} ${body_height}"/--> <!-- [m] [m] [m] -->
         </geometry>
       </visual>
 
@@ -102,7 +102,7 @@
 
   <!-- Rotor joint and link -->
   <xacro:macro name="vertical_rotor"
-    params="robot_namespace suffix direction motor_constant moment_constant parent mass_rotor radius_rotor time_constant_up time_constant_down max_rot_velocity motor_number rotor_drag_coefficient rolling_moment_coefficient color *origin *inertia">
+    params="robot_namespace suffix direction motor_constant moment_constant parent mass_rotor radius_rotor time_constant_up time_constant_down max_rot_velocity motor_number rotor_drag_coefficient rolling_moment_coefficient color prop_scale *origin *inertia">
     <joint name="rotor_${motor_number}_joint" type="continuous">
       <xacro:insert_block name="origin" />
       <axis xyz="0 0 1" />
@@ -124,7 +124,7 @@
         <geometry>
           <!-- <cylinder length="0.005" radius="${radius_rotor}"/> --> <!-- [m] -->
           <mesh filename="package://ardupilot_gazebo/models/util/propeller_${direction}.dae"
-            scale="0.00055 0.00055 0.00055" />
+            scale="${prop_scale} ${prop_scale} ${prop_scale}" />
           <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
         </geometry>
       </visual>
