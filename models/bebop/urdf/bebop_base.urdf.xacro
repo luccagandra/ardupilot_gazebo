@@ -5,6 +5,7 @@
   <xacro:property name="rotor_velocity_slowdown_sim" value="15" />
   <xacro:property name="mesh_file" value="ardupilot_gazebo/models/bebop/meshes/bebop.dae" />
   <xacro:property name="mesh_scale" value="0.001" />
+  <xacro:property name="prop_scale" value="0.00055" />
   <xacro:property name="mass" value="0.5" />  <!-- [kg] tum_sim 1.477 kg -->
   <xacro:property name="body_width" value="0.212" /> <!-- [m] old_value 0.1-->
   <xacro:property name="body_height" value="0.062" /> <!-- [m] -->
@@ -70,7 +71,8 @@
     motor_number="1"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Red">
+    color="Red"
+    prop_scale="${prop_scale}">
     <origin xyz="0.08440513 0.09784210 ${rotor_offset_top}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
@@ -90,7 +92,8 @@
     motor_number="0"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Blue">
+    color="Blue"
+    prop_scale="${prop_scale}">
     <origin xyz="0.08440513 -0.09784210 ${rotor_offset_top}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
@@ -110,7 +113,8 @@
     motor_number="2"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Blue">
+    color="Blue"
+    prop_scale="${prop_scale}">
     <origin xyz="-0.06853580 0.09784210 ${rotor_offset_top}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
@@ -130,7 +134,8 @@
     motor_number="3"
     rotor_drag_coefficient="${rotor_drag_coefficient}"
     rolling_moment_coefficient="${rolling_moment_coefficient}"
-    color="Red">
+    color="Red"
+    prop_scale="${prop_scale}">
     <origin xyz="-0.06853580 -0.09784210 ${rotor_offset_top}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
