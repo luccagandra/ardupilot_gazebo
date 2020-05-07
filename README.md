@@ -8,7 +8,7 @@
 
 ## Installation
 
-Pleas refer to the [Installation Instruction](https://github.com/larics/ardupilot_gazebo/blob/larics-master/INSTALLATION.md).
+Pleas refer to the [Installation Instruction](INSTALLATION.md).
 
 ## Simulation Startup
 
@@ -61,7 +61,7 @@ export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.par
 Or use the parameters obatained in the SITL simulation using AUTOTUNE as follows.
 
 ```bash
-export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.parm
+export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red_autotuned.parm
 ```
 
 ````bash
@@ -145,10 +145,51 @@ When messages:
 appear then execute the following command in the MAVProxy command line.
 
 ```bash
+# Set Throttle channel to neutral
 rc 3 1500
+
+# Arm and takeoff
 mode guided
 arm throttle
 takeoff 3
+```
+
+### AUTOTUNE instructions
+
+In the MAVProxy command line type in the following lines.
+
+```bash
+# set Channel 7 to trigger AUTOTUNE mode
+param set RC7_OPTION 17
+
+# Set Autotune to tune all axes
+param set AUTOTUNE_AXES 7
+
+# Set Channel 7 to LOW value
+rc 7 1100
+
+# Set Throttle channel to neutral
+rc 3 1500
+
+# Arm and takeoff
+mode guided
+arm throttle
+takeoff 3
+
+# Trigger AUTOTUNE mode
+rc 7 1900
+
+# Wait for Autotune to finish...
+
+# Exit and enter AUTOTUNE mode again
+rc 7 1100
+rc 7 1900
+
+# Land in AUTOTUNE mode and new PARAMETERS should set and saved
+rc 3 1400
+
+# Save parameter file
+param save ~/catkin_ws/src/ardupilot_gazebo/config/new_params.parm
 ```
 
 ## GCS
