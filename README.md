@@ -12,7 +12,13 @@ Pleas refer to the [Installation Instruction](https://github.com/larics/ardupilo
 
 ## Simulation Startup
 
-**Note**: Make sure that you start the *sim_vehicle.py* script for each vehicle from their respective folder.
+**Note**: Make sure that you start the *sim_vehicle.py* script for each vehicle from their respective folder. It is therefore useful to make an alias command
+similar to the following example in the *~/.bashrc*.
+
+```bash
+export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.parm
+alias kopterworx_sitl="mkdir -p ~/Documents/kopterworx_startup && cd ~/Documents/kopterworx_startup && sim_vehicle.py -v ArduCopter --add-param-file=$KOPTER_PARAMS -f gazebo-iris -m --mav10 --console -I0 -m --streamrate=50"
+```
 
 ### Bebop
 
@@ -44,23 +50,25 @@ roslaunch ardupilot_gazebo ardrone.launch
 roslaunch ardupilot_gazebo mavros.launch
 ````
 
-### Rover
-
-````bash
-# On 1st Terminal(Launch Ardupilot SITL)
-sim_vehicle.py -v APMrover2 -f gazebo-rover  -m --mav10 --map --console -I1
-
-# On 2nd Termianal(Launch Gazebo with differential drive Rover model, Retrieved from Husky Model)
-gazebo --verbose rover_ardupilot.world
-````
-
 ### Kopterworx
+
+Use the original Kopterworx RED parameters as follows.
+
+```bash
+export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.parm
+```
+
+Or use the parameters obatained in the SITL simulation using AUTOTUNE as follows.
+
+```bash
+export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.parm
+```
 
 ````bash
 # 1st terminal
 mkdir -p ~/kopter_startup
 cd ~/kopter_startup
-sim_vehicle.py -v ArduCopter --add-param-file=$HOME/catkin_ws/src/ardupilot_gazebo/config/kopterworx_red.parm -f gazebo-iris -m --mav10 --console -I0 -m --streamrate=50
+sim_vehicle.py -v ArduCopter --add-param-file=$KOPTER_PARAMS -f gazebo-iris -m --mav10 --console -I0 -m --streamrate=50
 
 # 2nd terminal
 roslaunch ardupilot_gazebo kopterworx.launch
@@ -87,6 +95,16 @@ sim_vehicle.py -v ArduPlane -f gazebo-zephyr  -m --mav10 --map --console -I0
 
 # On 2nd Terminal(Launch Gazebo with demo Zephyr flying wing model)
 gazebo --verbose zephyr_ardupilot_demo.world
+````
+
+### Rover
+
+````bash
+# On 1st Terminal(Launch Ardupilot SITL)
+sim_vehicle.py -v APMrover2 -f gazebo-rover  -m --mav10 --map --console -I1
+
+# On 2nd Termianal(Launch Gazebo with differential drive Rover model, Retrieved from Husky Model)
+gazebo --verbose rover_ardupilot.world
 ````
 
 ## Simulation and MAVProxy commands
