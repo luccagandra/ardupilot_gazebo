@@ -160,6 +160,7 @@
 
   </xacro:macro>
    
+  <!-- TODO(lmark): Ardupilot macro cleanup -->
   <xacro:macro name="ardupilot" 
     params="imu_topic control_topic imu_sensor_name rotor_0_joint rotor_1_joint rotor_2_joint rotor_3_joint thrust_multiplier">
      <gazebo>

@@ -10,7 +10,7 @@
 	<xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />
 	
 
-  	<!-- Realistic odometry sensor with noise -->
+  <!-- Realistic odometry sensor with noise -->
 	<xacro:odometry_plugin_macro
 		namespace="${namespace}"
 		odometry_sensor_suffix=""
