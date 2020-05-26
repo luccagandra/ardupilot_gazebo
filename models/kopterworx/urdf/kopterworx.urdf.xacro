@@ -26,7 +26,7 @@
 
 	<xacro:if value="${enable_velodyne}">
 		<xacro:include filename="$(find velodyne_description)/urdf/VU-8.urdf.xacro"/>
-		<VU-8 parent="base_link" name="velodyne" topic="${namespace}/velodyne_points" hz="20" samples="440" gpu="false"
+		<VU-8 parent="base_link" name="velodyne" topic="${namespace}/velodyne_points" hz="10" samples="440" gpu="false"
 						min_range="1" lasers="16">
 				<xacro:insert_block name="horizontal_velodyne_origin"/>
 		</VU-8>
