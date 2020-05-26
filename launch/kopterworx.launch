@@ -9,11 +9,13 @@
   <arg name="enable_ground_truth" default="true"/>
 	<arg name="enable_velodyne" default="false" />
 	<arg name="model" value="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
+	<arg name="world" default="worlds/empty.world"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false" />
     <arg name="use_sim_time" value="true"/>
     <arg name="verbose" value="true" />
+		<arg name="world_name" value="$(arg world)" />
   </include>
 
   <!-- send the robot XML to param server -->
