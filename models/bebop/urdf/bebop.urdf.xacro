@@ -80,7 +80,9 @@
 		rotor_1_joint="bebop::rotor_1_joint"
 		rotor_2_joint="bebop::rotor_2_joint"
 		rotor_3_joint="bebop::rotor_3_joint"
-		thrust_multiplier="1000">
+		thrust_multiplier="1000"
+		fdm_port_in="9002"
+		fdm_port_out="9003">
 	</xacro:ardupilot>
 
     <link name="laser1D_link">

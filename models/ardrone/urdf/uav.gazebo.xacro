@@ -129,7 +129,9 @@
 		rotor_1_joint="uav::rotor_1_joint"
 		rotor_2_joint="uav::rotor_2_joint"
 		rotor_3_joint="uav::rotor_3_joint"
-		thrust_multiplier="1475">
+		thrust_multiplier="1475"
+    fdm_port_in="9002"
+		fdm_port_out="9003">
 	</xacro:ardupilot>
 
 </robot>

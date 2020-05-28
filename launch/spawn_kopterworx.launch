@@ -9,12 +9,16 @@
   <arg name="enable_ground_truth" default="true"/>
 	<arg name="enable_velodyne" default="false" />
 	<arg name="model" value="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
+	<arg name="fdm_port_in" default="9012"/>
+	<arg name="fdm_port_out" default="9013"/>
 
   <!-- send the robot XML to param server -->
 	<param name="$(arg name)/robot_description" command="
 	  $(find xacro)/xacro --inorder $(arg model)
 		namespace:=$(arg name)
 		enable_velodyne:=$(arg enable_velodyne)
+		fdm_port_in:=$(arg fdm_port_in)
+		fdm_port_out:=$(arg fdm_port_out)
 	  "
 	/>
 
