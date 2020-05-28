@@ -239,13 +239,13 @@
         </geometry>
       </collision-->
 
-      <!--visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 1.57 0"/>
         <geometry>
-          <box size="${camera_link} ${camera_link} ${camera_link}"/>
+          <!--box size="${camera_link} ${camera_link} ${camera_link}"/-->
+          <mesh filename="package://ardupilot_gazebo/models/util/asus_xtion_pro_camera.dae" scale="1 1 1" />
         </geometry>
-        <material name="red"/>
-      </visual-->
+      </visual>
 
       <inertial>
         <mass value="${camera_mass}" />
@@ -292,7 +292,7 @@
           <cameraName>camera_ir</cameraName>
           <imageTopicName>/${namespace}/camera/color/image_raw</imageTopicName>
           <cameraInfoTopicName>/${namespace}/camera/color/camera_info</cameraInfoTopicName>
-          <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+          <depthImageTopicName>/${namespace}/camera/depth/image_raw</depthImageTopicName>
           <depthImageCameraInfoTopicName>/${namespace}/camera/depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>/${namespace}/camera/depth_registered/points</pointCloudTopicName>
           <frameName>camera</frameName>
