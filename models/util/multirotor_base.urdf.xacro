@@ -162,14 +162,14 @@
    
   <!-- TODO(lmark): Ardupilot macro cleanup -->
   <xacro:macro name="ardupilot" 
-    params="imu_topic control_topic imu_sensor_name rotor_0_joint rotor_1_joint rotor_2_joint rotor_3_joint thrust_multiplier">
+    params="imu_topic control_topic imu_sensor_name rotor_0_joint rotor_1_joint rotor_2_joint rotor_3_joint thrust_multiplier fdm_port_in fdm_port_out">
      <gazebo>
         <plugin name="arducopter_plugin" filename="libArduPilotPlugin.so">
         <imuTopicName>${imu_topic}</imuTopicName>
         <controlTopicName>${control_topic}</controlTopicName>
         <fdm_addr>127.0.0.1</fdm_addr>
-        <fdm_port_in>9002</fdm_port_in>
-        <fdm_port_out>9003</fdm_port_out>
+        <fdm_port_in>${fdm_port_in}</fdm_port_in>
+        <fdm_port_out>${fdm_port_out}</fdm_port_out>
         <!--
             Require by APM :
             Only change model and gazebo from XYZ to XY-Z coordinates
