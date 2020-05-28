@@ -145,7 +145,7 @@
         <maxRotVelocity>${max_rot_velocity}</maxRotVelocity>
         <motorConstant>${motor_constant}</motorConstant>
         <momentConstant>${moment_constant}</momentConstant>
-        <commandTopic>${robot_namespace}/command/motors</commandTopic>
+        <commandSubTopic>${robot_namespace}/gazebo/command/motor_speed</commandSubTopic>
         <motorNumber>${motor_number}</motorNumber>
         <rotorDragCoefficient>${rotor_drag_coefficient}</rotorDragCoefficient>
         <rollingMomentCoefficient>${rolling_moment_coefficient}</rollingMomentCoefficient>
@@ -289,7 +289,7 @@
           <!-- Keep this zero, update_rate in the parent <sensor> tag
             will control the frame rate. -->
           <updateRate>0.0</updateRate>
-          <cameraName>camera_ir</cameraName>
+          <cameraName>${namespace}/camera_ir</cameraName>
           <imageTopicName>/${namespace}/camera/color/image_raw</imageTopicName>
           <cameraInfoTopicName>/${namespace}/camera/color/camera_info</cameraInfoTopicName>
           <depthImageTopicName>/${namespace}/camera/depth/image_raw</depthImageTopicName>
