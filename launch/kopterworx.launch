@@ -10,6 +10,8 @@
 	<arg name="enable_velodyne" default="false" />
 	<arg name="model" value="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
 	<arg name="world" default="worlds/empty.world"/>
+	<arg name="fdm_port_in" default="9002"/>
+	<arg name="fdm_port_out" default="9003"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false" />
@@ -23,6 +25,8 @@
 	  $(find xacro)/xacro --inorder $(arg model)
 		namespace:=$(arg name)
 		enable_velodyne:=$(arg enable_velodyne)
+		fdm_port_in:=$(arg fdm_port_in)
+		fdm_port_out:=$(arg fdm_port_out)
 	  "
 	/>
 
