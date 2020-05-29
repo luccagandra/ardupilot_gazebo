@@ -4,7 +4,7 @@
 	<arg name="namespace" default="$(env UAV_NAMESPACE)"/>
 	
 	<!-- SITL - fcu_url needs to be the outward ip:port of MAVProxy -->
-	<arg name="fcu_url" default="udp://:14551@localhost:14555" />
+	<arg name="fcu_url" default="udp://:14550@localhost:14555" />
 	<arg name="gcs_url" default="" />
 	<arg name="tgt_system" default="1" />
 	<arg name="tgt_component" default="1" />
