@@ -12,13 +12,7 @@ Pleas refer to the [Installation Instruction](INSTALLATION.md).
 
 ## Simulation Startup
 
-**Note**: Make sure that you start the *sim_vehicle.py* script for each vehicle from their respective folder. It is therefore useful to make an alias command
-similar to the following example in the *~/.bashrc*.
-
-```bash
-export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.parm
-alias kopterworx_sitl="mkdir -p ~/Documents/kopterworx_startup && cd ~/Documents/kopterworx_startup && sim_vehicle.py -v ArduCopter --add-param-file=$KOPTER_PARAMS -f gazebo-iris -m --mav10 --console -I0 -m --streamrate=50"
-```
+**Note**: Make sure that you start the *sim_vehicle.py* script for each vehicle from their respective folder.
 
 ### Bebop
 
@@ -52,29 +46,38 @@ roslaunch ardupilot_gazebo mavros.launch
 
 ### Kopterworx
 
-Use the original Kopterworx RED parameters as follows.
-
-```bash
-export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red.parm
-```
-
-Or use the parameters obatained in the SITL simulation using AUTOTUNE as follows.
-
-```bash
-export KOPTER_PARAMS=$HOME/new_ws/src/ardupilot_gazebo/config/kopterworx_red_autotuned.parm
-```
+#### SINGLE UAV
 
 ````bash
 # 1st terminal
-mkdir -p ~/kopter_startup
-cd ~/kopter_startup
-sim_vehicle.py -v ArduCopter --add-param-file=$KOPTER_PARAMS -f gazebo-iris -m --mav10 --console -I0 -m --streamrate=50
+roslaunch arupilot_gazebo sim_vechicle.launch
 
 # 2nd terminal
 roslaunch ardupilot_gazebo kopterworx.launch
 
 # 3rd terminal
 roslaunch ardupilot_gazebo mavros.launch
+````
+
+#### Multiple UAVs
+
+**NOTE**: Every UAV instance needs a unique SYSID_THISMAV parameter. This is taken care of in the *run_copter.sh*.
+Furthermore, the target_system parameter needs to increase both in sim_vehicle and mavros.
+
+````bash
+  roslaunch gazebo_ros empty_world.launch
+
+  # 2 x sim_vehicle
+  roslaunch ardupilot_gazebo sim_vehicle.launch id:=1
+  roslaunch ardupilot_gazebo sim_vehicle.launch id:=2
+
+  # 2 x spawn_kopterworx
+  roslaunch ardupilot_gazebo spawn_kopterworx.launch name:=red x:=0 y:=0 fdm_port_in:=9002 fdm_port_out:=9003
+  roslaunch ardupilot_gazebo spawn_kopterworx.launch name:=blue x:=2 y:=2 fdm_port_in:=9012 fdm_port_out:=9013
+
+  # 2 x start mavros
+  roslaunch ardupilot_gazebo mavros.launch namespace:=red
+  roslaunch ardupilot_gazebo mavros.launch namespace:=red fcu_url:="udp://:14560@localhost:14565" tgt_system:=2
 ````
 
 ### 3DR IRIS Copter
