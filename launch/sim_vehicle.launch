@@ -1,0 +1,12 @@
+<launch>
+
+  <arg name="name" default="kopterworx"/>
+  <arg name="id" default="1"/>
+  <arg name="parm_file" default="$(find ardupilot_gazebo)/config/kopterworx_red.parm"/>
+  <arg name="enable_console" default="true"/>
+  <arg name="enable_map" default="false"/>
+
+  <node name="sim_vehicle_startup" pkg="ardupilot_gazebo" type="run_copter.sh" 
+    args="$(arg name) $(arg id) $(arg parm_file) $(arg enable_console) $(arg enable_map)" output="screen"/>
+
+</launch>
