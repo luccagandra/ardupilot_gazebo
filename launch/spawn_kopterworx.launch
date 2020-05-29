@@ -1,7 +1,6 @@
 <launch>
 
   <arg name="name" default="blue"/>
-	<arg name="camera_namespace" default="blue"/>
   <arg name="tf_prefix" default="$(arg name)"/>
 	<arg name="x" default="2.0"/>
 	<arg name="y" default="2.0"/>
