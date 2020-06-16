@@ -74,7 +74,7 @@
 
 	<xacro:ardupilot
 		imu_topic="/bebop/imu"
-		control_topic="/gazebo/command/motor_speed"
+		control_topic="/bebop/gazebo/command/motor_speed"
 		imu_sensor_name="bebop::imu_link::imu_sensor"
 		rotor_0_joint="bebop::rotor_0_joint"
 		rotor_1_joint="bebop::rotor_1_joint"
