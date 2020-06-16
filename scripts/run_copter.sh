@@ -45,4 +45,5 @@ cat <<EOF > ${STARTUP_DIR}/identity.parm
 SYSID_THISMAV ${VEHICLE_ID}
 EOF
 
-sim_vehicle.py -v ArduCopter --add-param-file=${PARAM_PATH} --add-param-file=${IDENTITY_PATH} -f gazebo-iris -m --mav10 -I$((${VEHICLE_ID} - 1)) -m --streamrate=50 -m --target-system=${VEHICLE_ID} ${SIM_VEHICLE_ARGS}
+echo "sim_vehicle.py -v ArduCopter --add-param-file=${PARAM_PATH} --add-param-file=${IDENTITY_PATH} -f gazebo-iris -I$((${VEHICLE_ID} - 1)) -m \"--mav10 --streamrate=50 --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
+sim_vehicle.py -v ArduCopter --add-param-file=${PARAM_PATH} --add-param-file=${IDENTITY_PATH} -f gazebo-iris -I$((${VEHICLE_ID} - 1)) -m "--mav10 --streamrate=50 --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
