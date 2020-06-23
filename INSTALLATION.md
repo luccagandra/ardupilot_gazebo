@@ -34,8 +34,8 @@ cd ardupilot
 git submodule update --init --recursive
 cd Tools/environment_install
 ./install-prereqs-ubuntu.sh -y
-echo "export PATH=$PATH:$HOME/ardupilot/Tools/autotest" >> ~/.bashrc
-echo "export PATH=/usr/lib/ccache:$PATH" >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/ardupilot/Tools/autotest' >> ~/.bashrc
+echo 'export PATH=/usr/lib/ccache:$PATH' >> ~/.bashrc
 source ~/.bashrc
 ```
 

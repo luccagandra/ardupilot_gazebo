@@ -50,7 +50,7 @@ roslaunch ardupilot_gazebo mavros.launch
 
 ````bash
 # 1st terminal
-roslaunch arupilot_gazebo sim_vechicle.launch
+roslaunch ardupilot_gazebo sim_vechicle.launch
 
 # 2nd terminal
 roslaunch ardupilot_gazebo kopterworx.launch
