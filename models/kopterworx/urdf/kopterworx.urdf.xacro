@@ -85,7 +85,9 @@
 		<inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" /> <!-- [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] -->
 		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
 	</xacro:odometry_plugin_macro>
-	
+
+<!-- Choose one of the following (and comment out the other): fixed RGBD camera or gimbal with RGBD camera. -->	
+
   <xacro:cam
     namespace="$(arg namespace)"
     camera_link="${camera_size}"
@@ -94,5 +96,9 @@
 		<xacro:insert_block name="front_facing_camera"/>    
     <xacro:insert_block name="camera_inertia"/>
   </xacro:cam>
+
+<!--   <xacro:gimbal_macro parent="base_link">
+    <origin xyz="0.25 0 -0.1" rpy="0 0 0"/>
+  </xacro:gimbal_macro> -->
 	
 </robot>

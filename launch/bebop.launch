@@ -2,7 +2,7 @@
 
 <launch>
 	<arg name="name" default="bebop"/>
-	<arg name="camera_namespace" default="red"/>
+	<arg name="camera_namespace" default="$(env UAV_NAMESPACE)"/>
 	<arg name="velodyne_name" default="velodyne_model"/>
 	<arg name="tf_prefix" default="$(arg name)"/>
 	<arg name="x" default="0.0"/>
