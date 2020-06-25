@@ -122,8 +122,8 @@
   </xacro:odometry_plugin_macro>
 
 	<xacro:ardupilot
-		imu_topic="/uav/imu"
-		control_topic="/gazebo/command/motor_speed"
+		imu_topic="/$(arg name)/imu"
+		control_topic="/$(arg name)/gazebo/command/motor_speed"
 		imu_sensor_name="uav::imu_link::imu_sensor"
 		rotor_0_joint="uav::rotor_0_joint"
 		rotor_1_joint="uav::rotor_1_joint"
