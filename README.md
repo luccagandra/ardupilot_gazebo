@@ -77,7 +77,7 @@ Furthermore, the target_system parameter needs to increase both in sim_vehicle a
 
   # 2 x start mavros
   roslaunch ardupilot_gazebo mavros.launch namespace:=red
-  roslaunch ardupilot_gazebo mavros.launch namespace:=red fcu_url:="udp://:14560@localhost:14565" tgt_system:=2
+  roslaunch ardupilot_gazebo mavros.launch namespace:=blue fcu_url:="udp://:14560@localhost:14565" tgt_system:=2
 ````
 
 ### 3DR IRIS Copter
