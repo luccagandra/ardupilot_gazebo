@@ -9,6 +9,7 @@ VEHICLE_ID=$2
 PARAM_PATH=$3
 ENABLE_CONSOLE=$4
 ENABLE_MAP=$5
+STREAMRATE=$6
 
 if [ -z "${VEHICLE_NAME}" ] ; then
   VEHICLE_NAME="default"
@@ -24,6 +25,10 @@ fi
 
 if [ -z "${ENABLE_MAP}" ] ; then
   ENABLE_MAP="false"
+fi
+
+if [ -z "${STREAMRATE}" ] ; then
+  STREAMRATE="50"
 fi
 
 # Navigate to the startup folder
@@ -46,5 +51,5 @@ SYSID_THISMAV ${VEHICLE_ID}
 EOF
 
 cat ${PARAM_PATH} >> ${IDENTITY_PATH}
-echo "sim_vehicle.py -v ArduCopter --add-param-file=${IDENTITY_PATH} -f gazebo-iris -I$((${VEHICLE_ID} - 1)) -m \"--mav10 --streamrate=50 --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
-sim_vehicle.py -v ArduCopter --add-param-file=${IDENTITY_PATH} -f gazebo-iris -I$((${VEHICLE_ID} - 1)) -m "--mav10 --streamrate=50 --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
+echo "sim_vehicle.py -v ArduCopter --add-param-file=${IDENTITY_PATH} -f gazebo-iris -I$((${VEHICLE_ID} - 1)) -m \"--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
+sim_vehicle.py -v ArduCopter --add-param-file=${IDENTITY_PATH} -f gazebo-iris -I$((${VEHICLE_ID} - 1)) -m "--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
