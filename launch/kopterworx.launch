@@ -11,10 +11,11 @@
 	<arg name="world" default="worlds/empty.world"/>
 	<arg name="fdm_port_in" default="9002"/>
 	<arg name="fdm_port_out" default="9003"/>
+	<arg name="use_sim_time" default="true"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false" />
-    <arg name="use_sim_time" value="true"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="verbose" value="true" />
 		<arg name="world_name" value="$(arg world)" />
   </include>
