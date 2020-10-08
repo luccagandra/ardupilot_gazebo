@@ -84,6 +84,7 @@ cd ~/catkin_ws/src
 git clone https://github.com/larics/ardupilot_gazebo
 cd ardupilot_gazebo
 git checkout larics_master
+echo "source ~/catkin_ws/src/ardupilot_gazebo/scripts/shell_scripts.sh" >> ~/.bashrc
 echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
 echo "export GAZEBO_MODEL_PATH=~/catkin_ws/ardupilot_gazebo/models:$GAZEBO_MODEL_PATH" >> ~/.bashrc
 echo "export GAZEBO_PLUGIN_PATH=~/catkin_ws/build/ardupilot_gazebo:${GAZEBO_PLUGIN_PATH}" >> ~/.bashrc
