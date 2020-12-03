@@ -36,6 +36,7 @@ cd Tools/environment_install
 ./install-prereqs-ubuntu.sh -y
 echo 'export PATH=$PATH:$HOME/ardupilot/Tools/autotest' >> ~/.bashrc
 echo 'export PATH=/usr/lib/ccache:$PATH' >> ~/.bashrc
+pip install mavproxy
 source ~/.bashrc
 ```
 
