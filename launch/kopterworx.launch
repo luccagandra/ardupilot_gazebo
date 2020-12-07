@@ -51,7 +51,9 @@
 	</node>
 
 	<group if="$(arg enable_rotating_velodyne)">
-    <include file="$(find ardupilot_gazebo)/launch/velodyne_controller.launch" />
+    <include file="$(find velodyne_gazebo_plugins)/launch/velodyne_controller.launch">
+			<arg name="namespace" value="$(env UAV_NAMESPACE)"/>
+		</include>
   </group>
 
 </launch>
