@@ -7,6 +7,7 @@
 	<arg name="z" default="0.5"/>
   <arg name="enable_ground_truth" default="true"/>
 	<arg name="enable_velodyne" default="false" />
+	<arg name="enable_rotating_velodyne" default="false"/>
 	<arg name="model" value="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
 	<arg name="world" default="worlds/empty.world"/>
 	<arg name="fdm_port_in" default="9002"/>
@@ -27,6 +28,7 @@
 	  $(find xacro)/xacro --inorder $(arg model)
 		namespace:=$(arg name)
 		enable_velodyne:=$(arg enable_velodyne)
+		enable_rotating_velodyne:=$(arg enable_rotating_velodyne)
 		fdm_port_in:=$(arg fdm_port_in)
 		fdm_port_out:=$(arg fdm_port_out)
 	  "
@@ -47,5 +49,9 @@
 	       -model $(arg name)"
 	 respawn="false" output="screen" >
 	</node>
+
+	<group if="$(arg enable_rotating_velodyne)">
+    <include file="$(find ardupilot_gazebo)/launch/velodyne_controller.launch" />
+  </group>
 
 </launch>
