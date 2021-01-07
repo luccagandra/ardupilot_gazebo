@@ -17,6 +17,7 @@ find_package(
 
 find_package(gazebo REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
+set(CMAKE_CXX_STANDARD 17)
 
 if("${GAZEBO_VERSION}" VERSION_LESS "7.0")
   message(
