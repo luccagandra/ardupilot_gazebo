@@ -950,8 +950,17 @@ bool ArduPilotPlugin::InitArduPilotSockets(sdf::ElementPtr _sdf) const
 {
   getSdfParam<std::string>(_sdf, "fdm_addr", this->dataPtr->fdm_addr, "127.0.0.1");
   getSdfParam<std::string>(_sdf, "listen_addr", this->dataPtr->listen_addr, "127.0.0.1");
-  getSdfParam<uint16_t>(_sdf, "fdm_port_in", this->dataPtr->fdm_port_in, 9002);
-  getSdfParam<uint16_t>(_sdf, "fdm_port_out", this->dataPtr->fdm_port_out, 9003);
+
+  int fdm_port_in_temp;
+  int fdm_port_out_temp;
+
+  // Catch ports from SDF as int
+  getSdfParam<int>(_sdf, "fdm_port_in", fdm_port_in_temp, 9002);
+  getSdfParam<int>(_sdf, "fdm_port_out", fdm_port_out_temp, 9003);
+
+  // Assing them as uint16_t
+  this->dataPtr->fdm_port_in = static_cast<uint16_t>(fdm_port_in_temp);
+  this->dataPtr->fdm_port_out = static_cast<uint16_t>(fdm_port_out_temp);
 
   if (!this->dataPtr->socket_in.Bind(
         this->dataPtr->listen_addr.c_str(), this->dataPtr->fdm_port_in)) {
