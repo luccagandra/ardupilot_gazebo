@@ -200,7 +200,14 @@ void ArduCopterIRLockPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr _s
     return;
   }
   getSdfParam<std::string>(_sdf, "irlock_addr", this->dataPtr->irlock_addr, "127.0.0.1");
-  getSdfParam<uint16_t>(_sdf, "irlock_port", this->dataPtr->irlock_port, 9005);
+
+  int irlock_port_temp;
+
+  // Catch ports from SDF as int
+  getSdfParam<int>(_sdf, "fdm_port_out", irlock_port_temp, 9005);
+
+  // Assing them as uint16_t
+  this->dataPtr->irlock_port = static_cast<uint16_t>(irlock_port_temp);
 
   this->dataPtr->parentSensor->SetActive(true);
 
