@@ -32,7 +32,7 @@ sudo apt-get -y install dpkg git
 echo "clone uav_ros_simulation"
 cd
 git clone https://github.com/lmark1/uav_ros_simulation.git
-cd uav_ros_stack
+cd uav_ros_simulation
 
 echo "running the main install.sh"
 ./installation/install.sh
