@@ -1,5 +1,9 @@
 # Ardupilot Gazebo Plugin & Models
 
+| Ubuntu 18.04  | Ubuntu 20.04|
+|---------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+ [![Melodic](https://github.com/larics/ardupilot_gazebo/workflows/Melodic/badge.svg)](https://github.com/larics/ardupilot_gazebo/actions) | [![Noetic](https://github.com/larics/ardupilot_gazebo/workflows/Noetic/badge.svg)](https://github.com/larics/ardupilot_gazebo/actions) |
+
 ## Requirements
 
 * Ubuntu 18.04 LTS (Bionic Beaver)
