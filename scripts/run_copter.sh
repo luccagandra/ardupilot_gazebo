@@ -10,6 +10,7 @@ PARAM_PATH=$3
 ENABLE_CONSOLE=$4
 ENABLE_MAP=$5
 STREAMRATE=$6
+ADDITIONAL_ARGS="${@:7:99}"
 
 if [ -z "${VEHICLE_NAME}" ] ; then
   VEHICLE_NAME="default"
@@ -44,6 +45,7 @@ fi
 if [ "$ENABLE_MAP" = true ] ; then
     SIM_VEHICLE_ARGS="${SIM_VEHICLE_ARGS} --map"
 fi
+SIM_VEHICLE_ARGS="${SIM_VEHICLE_ARGS} ${ADDITIONAL_ARGS}"
 
 IDENTITY_PATH=${STARTUP_DIR}/identity.parm
 cat <<EOF > ${STARTUP_DIR}/identity.parm
