@@ -22,7 +22,8 @@ ADDITIONAL_ARGS=""
 for arg in "${@:7:99}"
 do
   if [[ ! $arg = __* ]]; then
-    ADDITIONAL_ARGS="${arg} ${ADDITIONAL_ARGS}"
+    echo "[mavproxy_start.sh] Found valid argument: $arg"
+    ADDITIONAL_ARGS="${ADDITIONAL_ARGS} ${arg}"
   fi
 done
 
