@@ -1,7 +1,14 @@
 #!/bin/bash
 # Script for launch sim_vehicle.py with all necessary arguments.
 
-set -o errexit 
+# Exit immediatelly if a command exits with a non-zero status
+set -e
+
+# Executes a command when DEBUG signal is emitted in this script - should be after every line
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+
+# Executes a command when ERR signal is emmitted in this script
+trap 'echo "$0: \"${last_command}\" command failed with exit code $?"' ERR
 
 # Catch all the bash script arguments
 VEHICLE_NAME=$1
@@ -10,7 +17,15 @@ PARAM_PATH=$3
 ENABLE_CONSOLE=$4
 ENABLE_MAP=$5
 STREAMRATE=$6
-ADDITIONAL_ARGS="${@:7:99}"
+
+# Get valid additional arguments
+ADDITIONAL_ARGS=""
+for arg in "${@:7:99}"
+do
+  if [[ ! $arg = __* ]]; then
+    ADDITIONAL_ARGS="${arg} ${ADDITIONAL_ARGS}"
+  fi
+done
 
 if [ -z "${VEHICLE_NAME}" ] ; then
   VEHICLE_NAME="default"

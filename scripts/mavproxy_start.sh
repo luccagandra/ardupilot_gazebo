@@ -16,7 +16,15 @@ PORT_MASTER=$3
 PORT_SITL=$4
 ID=$5
 STREAMRATE=$6
-ADDITIONAL_ARGS="${@:7:99}"
+
+# Get valid additional arguments
+ADDITIONAL_ARGS=""
+for arg in "${@:7:99}"
+do
+  if [[ ! $arg = __* ]]; then
+    ADDITIONAL_ARGS="${arg} ${ADDITIONAL_ARGS}"
+  fi
+done
 
 if [ -z "${PORT_OUT1}" ] ; then
   PORT_OUT1="14550"
@@ -44,6 +52,6 @@ fi
 
 # Single vehicle command
 echo "Start single vehicle MAVProxy command"
-echo "$HOME/.local/bin/mavproxy.py --mav10 --streamrate ${STREAMRATE} --target-system ${ID} --out 127.0.0.1:${PORT_OUT1} --out 127.0.0.1:${PORT_OUT2} --master tcp:127.0.0.1:${PORT_MASTER} --sitl 127.0.0.1:${PORT_SITL}"
-$HOME/.local/bin/mavproxy.py --mav10 --streamrate ${STREAMRATE} --target-system ${ID} --out 127.0.0.1:${PORT_OUT1} --out 127.0.0.1:${PORT_OUT2} --master tcp:127.0.0.1:${PORT_MASTER} --sitl 127.0.0.1:${PORT_SITL}
+echo "$HOME/.local/bin/mavproxy.py --mav10 --streamrate ${STREAMRATE} --target-system ${ID} --out 127.0.0.1:${PORT_OUT1} --out 127.0.0.1:${PORT_OUT2} --master tcp:127.0.0.1:${PORT_MASTER} --sitl 127.0.0.1:${PORT_SITL} ${ADDITIONAL_ARGS}"
+$HOME/.local/bin/mavproxy.py --mav10 --streamrate ${STREAMRATE} --target-system ${ID} --out 127.0.0.1:${PORT_OUT1} --out 127.0.0.1:${PORT_OUT2} --master tcp:127.0.0.1:${PORT_MASTER} --sitl 127.0.0.1:${PORT_SITL} ${ADDITIONAL_ARGS}
 echo "MAVProxy shutdown"
