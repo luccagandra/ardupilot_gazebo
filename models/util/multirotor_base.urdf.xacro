@@ -260,6 +260,14 @@
       <child link="camera_box"/>
     </joint>
 
+    <link name="camera"/>
+
+    <joint name="camera_help" type="fixed">
+      <parent link="camera_box"/>
+      <child link="camera"/>
+      <origin rpy="-1.57 0 -1.57"/>
+    </joint>
+
     <!-- camera -->
     <gazebo reference="camera_box">
       <sensor type="depth" name="camera">
