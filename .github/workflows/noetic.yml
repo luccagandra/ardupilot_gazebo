@@ -9,6 +9,8 @@ on:
     branches: [ larics-master ]
     paths-ignore: 
       - '**/README.md'
+      - '**.yaml'
+      - '**.launch'
   pull_request:
     branches: [ larics-master ]
 
@@ -23,9 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: cancel running workflows
-        uses: everphone-gmbh/cancel-previous-workflows@v5
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
 
    # This workflow contains a single job called "build"
   build:
