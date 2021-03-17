@@ -14,6 +14,7 @@
 	<arg name="fdm_port_out" default="9003"/>
 	<arg name="use_sim_time" default="true"/>
 	<arg name="gui" default="true"/>
+	<arg name="max_range" default="50"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false" />
@@ -31,9 +32,9 @@
 		enable_rotating_velodyne:=$(arg enable_rotating_velodyne)
 		fdm_port_in:=$(arg fdm_port_in)
 		fdm_port_out:=$(arg fdm_port_out)
+		max_range:=$(arg max_range)
 	  "
 	/>
-
 
 	<param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
 	<node name="robot_state_publisher" pkg="robot_state_publisher"
