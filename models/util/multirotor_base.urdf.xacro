@@ -20,10 +20,10 @@
   <!-- Main multirotor link -->
   <xacro:macro name="multirotor_base_macro"
     params="robot_namespace mass body_width body_height mesh_file mesh_scale *origin *inertia">
-    <link name="base_link"></link>
+    <link name="${robot_namespace}/base_link"></link>
     <joint name="base_joint" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="base_link" />
+      <parent link="${robot_namespace}/base_link" />
       <child link="base_link_inertia" />
     </joint>
     <link name="base_link_inertia">
@@ -85,7 +85,7 @@
 
     <!-- IMU joint -->
     <joint name="imu_joint" type="revolute">
-      <parent link="base_link" />
+      <parent link="${robot_namespace}/base_link" />
       <child link="imu_link" />
       <limit upper="0" lower="0" effort="0" velocity="0" />
     </joint>
@@ -94,7 +94,7 @@
     <gazebo>
       <plugin filename="librotors_gazebo_multirotor_base_plugin.so" name="rosbag">
         <robotNamespace>${robot_namespace}</robotNamespace>
-        <linkName>base_link</linkName>
+        <linkName>${robot_namespace}/base_link</linkName>
         <rotorVelocitySlowdownSim>${rotor_velocity_slowdown_sim}</rotorVelocitySlowdownSim>
       </plugin>
     </gazebo>

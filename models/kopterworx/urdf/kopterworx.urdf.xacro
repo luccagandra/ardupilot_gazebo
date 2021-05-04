@@ -81,7 +81,7 @@
 	<xacro:odometry_plugin_macro
 		namespace="${namespace}"
 		odometry_sensor_suffix=""
-		parent_link="base_link"
+		parent_link="${namespace}/base_link"
 		pose_topic="pose"
 		pose_with_covariance_topic="pose_with_covariance"
 		position_topic="position"
@@ -114,7 +114,7 @@
     namespace="$(arg namespace)"
     camera_link="${camera_size}"
     camera_mass="${camera_mass}"
-    parent="base_link">
+    parent="${namespace}/base_link">
 		<xacro:insert_block name="front_facing_camera"/>    
     <xacro:insert_block name="camera_inertia"/>
   </xacro:cam>
