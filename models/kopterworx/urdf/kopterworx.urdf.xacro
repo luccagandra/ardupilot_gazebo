@@ -48,10 +48,10 @@
 		imu_topic="/${namespace}/imu"
 		control_topic="/${namespace}/gazebo/command/motor_speed"
 		imu_sensor_name="${namespace}::imu_link::imu_sensor"
-		rotor_0_joint="${namespace}::rotor_0_joint"
-		rotor_1_joint="${namespace}::rotor_1_joint"
-		rotor_2_joint="${namespace}::rotor_2_joint"
-		rotor_3_joint="${namespace}::rotor_3_joint"
+		rotor_0_joint="${namespace}::${namespace}/rotor_0_joint"
+		rotor_1_joint="${namespace}::${namespace}/rotor_1_joint"
+		rotor_2_joint="${namespace}::${namespace}/rotor_2_joint"
+		rotor_3_joint="${namespace}::${namespace}/rotor_3_joint"
 		thrust_multiplier="600"
 		fdm_port_in="${fdm_port_in}"
 		fdm_port_out="${fdm_port_out}">
@@ -81,7 +81,7 @@
 	<xacro:odometry_plugin_macro
 		namespace="${namespace}"
 		odometry_sensor_suffix=""
-		parent_link="base_link"
+		parent_link="${namespace}/base_link"
 		pose_topic="pose"
 		pose_with_covariance_topic="pose_with_covariance"
 		position_topic="position"
@@ -114,7 +114,7 @@
     namespace="$(arg namespace)"
     camera_link="${camera_size}"
     camera_mass="${camera_mass}"
-    parent="base_link">
+    parent="${namespace}/base_link">
 		<xacro:insert_block name="front_facing_camera"/>    
     <xacro:insert_block name="camera_inertia"/>
   </xacro:cam>

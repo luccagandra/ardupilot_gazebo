@@ -20,13 +20,13 @@
   <!-- Main multirotor link -->
   <xacro:macro name="multirotor_base_macro"
     params="robot_namespace mass body_width body_height mesh_file mesh_scale *origin *inertia">
-    <link name="base_link"></link>
+    <link name="${robot_namespace}/base_link"></link>
     <joint name="base_joint" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="base_link" />
-      <child link="base_link_inertia" />
+      <parent link="${robot_namespace}/base_link" />
+      <child link="${robot_namespace}/base_link_inertia" />
     </joint>
-    <link name="base_link_inertia">
+    <link name="${robot_namespace}/base_link_inertia">
       <inertial>
         <mass value="${mass}" />  <!-- [kg] -->
         <origin xyz="0 0 0" />
@@ -85,7 +85,7 @@
 
     <!-- IMU joint -->
     <joint name="imu_joint" type="revolute">
-      <parent link="base_link" />
+      <parent link="${robot_namespace}/base_link" />
       <child link="imu_link" />
       <limit upper="0" lower="0" effort="0" velocity="0" />
     </joint>
@@ -94,7 +94,7 @@
     <gazebo>
       <plugin filename="librotors_gazebo_multirotor_base_plugin.so" name="rosbag">
         <robotNamespace>${robot_namespace}</robotNamespace>
-        <linkName>base_link</linkName>
+        <linkName>${robot_namespace}/base_link</linkName>
         <rotorVelocitySlowdownSim>${rotor_velocity_slowdown_sim}</rotorVelocitySlowdownSim>
       </plugin>
     </gazebo>
@@ -103,19 +103,19 @@
   <!-- Rotor joint and link -->
   <xacro:macro name="vertical_rotor"
     params="robot_namespace suffix direction motor_constant moment_constant parent mass_rotor radius_rotor time_constant_up time_constant_down max_rot_velocity motor_number rotor_drag_coefficient rolling_moment_coefficient color prop_scale *origin *inertia">
-    <joint name="rotor_${motor_number}_joint" type="continuous">
+    <joint name="${robot_namespace}/rotor_${motor_number}_joint" type="continuous">
       <xacro:insert_block name="origin" />
       <axis xyz="0 0 1" />
       <!-- TODO(ff): not currently set because it's not yet supported -->
       <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
       <parent link="${parent}" />
-      <child link="rotor_${motor_number}" />
+      <child link="${robot_namespace}/rotor_${motor_number}" />
 
     </joint>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <gazebo reference="rotor_${motor_number}_joint"> <axis> <xyz>0 0 1</xyz> 
       <limit> <velocity> ${max_rot_velocity} </velocity> </limit> </axis> </gazebo> -->
-    <link name="rotor_${motor_number}">
+    <link name="${robot_namespace}/rotor_${motor_number}">
       <inertial>
         <mass value="${mass_rotor}" /> <!-- [kg] -->
         <xacro:insert_block name="inertia" />
@@ -137,8 +137,8 @@
 
     <gazebo>
       <plugin name="${suffix}_motor_model" filename="librotors_gazebo_motor_model.so">
-        <jointName>rotor_${motor_number}_joint</jointName>
-        <linkName>rotor_${motor_number}</linkName>
+        <jointName>${robot_namespace}/rotor_${motor_number}_joint</jointName>
+        <linkName>${robot_namespace}/rotor_${motor_number}</linkName>
         <turningDirection>${direction}</turningDirection>
         <timeConstantUp>${time_constant_up}</timeConstantUp>
         <timeConstantDown>${time_constant_down}</timeConstantDown>
@@ -154,7 +154,7 @@
       </plugin>
     </gazebo>
 
-    <gazebo reference="rotor_${motor_number}">
+    <gazebo reference="${robot_namespace}/rotor_${motor_number}">
       <material>Gazebo/${color}</material>
     </gazebo>
 
@@ -230,7 +230,7 @@
   <xacro:macro name="cam" params="namespace camera_link camera_mass parent *origin *inertia">
 
     <!-- Camera link -->
-    <link name="camera_box">
+    <link name="${namespace}/camera_box">
 
       <!--collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -257,19 +257,19 @@
     <joint name="camera_joint" type="fixed">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
-      <child link="camera_box"/>
+      <child link="${namespace}/camera_box"/>
     </joint>
 
-    <link name="camera"/>
+    <link name="${namespace}/camera"/>
 
     <joint name="camera_help" type="fixed">
-      <parent link="camera_box"/>
-      <child link="camera"/>
+      <parent link="${namespace}/camera_box"/>
+      <child link="${namespace}/camera"/>
       <origin rpy="-1.57 0 -1.57"/>
     </joint>
 
     <!-- camera -->
-    <gazebo reference="camera_box">
+    <gazebo reference="${namespace}/camera_box">
       <sensor type="depth" name="camera">
         <update_rate>30.0</update_rate>
         
@@ -303,7 +303,7 @@
           <depthImageTopicName>/${namespace}/camera/depth/image_raw</depthImageTopicName>
           <depthImageCameraInfoTopicName>/${namespace}/camera/depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>/${namespace}/camera/depth_registered/points</pointCloudTopicName>
-          <frameName>camera</frameName>
+          <frameName>${namespace}/camera</frameName>
           <pointCloudCutoff>0.3</pointCloudCutoff>
           <pointCloudCutoffMax>10.0</pointCloudCutoffMax>
           <distortionK1>0</distortionK1>
