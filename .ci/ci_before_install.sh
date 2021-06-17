@@ -21,6 +21,7 @@ cd uav_ros_simulation
 echo "running the main install.sh"
 ./installation/install.sh
 
+gitman update ardupilot --skip-lock --force
 gitman update
 
 # checkout the SHA
