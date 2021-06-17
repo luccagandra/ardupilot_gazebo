@@ -26,6 +26,7 @@ jobs:
   cancel:
     name: Cancel Previous Runs
     runs-on: ubuntu-latest
+
     steps:
       - name: cancel running workflows
         uses: styfle/cancel-workflow-action@0.8.0
@@ -36,7 +37,9 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
-
+    env: 
+      CATKIN_WORKSPACE: uav_ws
+      
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it

@@ -19,13 +19,13 @@ git clone https://github.com/lmark1/uav_ros_simulation.git
 cd uav_ros_simulation
 
 echo "running the main install.sh"
-./installation/install_and_setup_workspace.sh
+./installation/install_and_setup_workspace.sh $WORKSPACE_NAME
 
 # checkout the SHA
 cd ~/uav_ros_simulation/.gitman/$PACKAGE_NAME
 git checkout "$SHA"
 
 source /opt/ros/$ROS_DISTRO/setup.bash
-cd ~/catkin_ws
+cd ~/$WORKSPACE_NAME
 
 echo "install ended"
