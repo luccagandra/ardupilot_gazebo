@@ -29,7 +29,7 @@ echo "Automatic takeoff started for $UAV_NAMESPACE UAV"
 waitForRos
 waitForSimulation
 
-if [ "$ODOMETRY_TOPIC"="mavros/global_position/local" ] ; then
+if [ "$ODOMETRY_TOPIC" == "mavros/global_position/local" ] ; then
   waitForOdometry
 fi
 
