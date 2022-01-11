@@ -6,22 +6,27 @@
 	<arg name="y" default="0.0"/>
 	<arg name="z" default="0.5"/>
   <arg name="enable_ground_truth" default="true"/>
-	<arg name="enable_velodyne" default="false" />
-	<arg name="enable_rotating_velodyne" default="false"/>
 	<arg name="model" value="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
 	<arg name="world" default="worlds/empty.world"/>
 	<arg name="fdm_port_in" default="9002"/>
 	<arg name="fdm_port_out" default="9003"/>
 	<arg name="use_sim_time" default="true"/>
 	<arg name="gui" default="true"/>
-	<arg name="max_range" default="50"/>
+  <arg name="remap_gazebo_tf" default="false"/>
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <!-- Velodyne properties - requires velodyne_simulator -->
+	<arg name="enable_velodyne" default="false" />
+	<arg name="enable_rotating_velodyne" default="false"/>
+  <arg name="laser_count" default="16"/>
+  <arg name="max_range" default="50"/>
+
+  <include file="$(find ardupilot_gazebo)/launch/empty_world.launch">
     <arg name="paused" value="false" />
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="verbose" value="true" />
 		<arg name="world_name" value="$(arg world)" />
 		<arg name="gui" value="$(arg gui)"/>
+    <arg name="remap_gazebo_tf" value="$(arg remap_gazebo_tf)"/>
   </include>
 
   <!-- send the robot XML to param server -->
@@ -33,6 +38,7 @@
 		fdm_port_in:=$(arg fdm_port_in)
 		fdm_port_out:=$(arg fdm_port_out)
 		max_range:=$(arg max_range)
+    laser_count:=$(arg laser_count)
 	  "
 	/>
 

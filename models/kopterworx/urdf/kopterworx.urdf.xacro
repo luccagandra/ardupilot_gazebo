@@ -8,6 +8,7 @@
 	<xacro:property name="fdm_port_in" value="$(arg fdm_port_in)"/>
 	<xacro:property name="fdm_port_out" value="$(arg fdm_port_out)"/>
 	<xacro:property name="max_range" value="$(arg max_range)"/>
+	<xacro:property name="laser_count" value="$(arg laser_count)"/>
 	
 	<gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
@@ -43,7 +44,10 @@
 	<xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_base.urdf.xacro" />
   <xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />
 	
-	<!-- Ardupilot plugin -->
+  <!-- Ardupilot plugin 
+    NOTE: thrust_multiplier 
+      Value is tuned in order for mavros/setpoint_raw/attitude/thrust to reflect real-world behavior. 
+  -->
   <xacro:ardupilot
 		imu_topic="/${namespace}/imu"
 		control_topic="/${namespace}/gazebo/command/motor_speed"
@@ -70,7 +74,7 @@
 				gpu="false"
 				min_range="1" 
 				max_range="${max_range}" 
-				lasers="16">
+				lasers="32">
 				<xacro:insert_block name="horizontal_velodyne_origin"/>
 			</xacro:lidar-x>
 		</xacro:if>
@@ -86,7 +90,7 @@
 				gpu="false"
 				min_range="1"
 				max_range="${max_range}"
-				lasers="16">
+				lasers="32">
 				<xacro:insert_block name="horizontal_velodyne_origin"/>
 			</xacro:lidar-x>
 		</xacro:unless>
