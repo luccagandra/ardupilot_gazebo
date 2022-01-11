@@ -14,6 +14,11 @@ if [ -z "${TAKEOFF_HEIGHT}" ] ; then
   TAKEOFF_HEIGHT=2
 fi
 
+ODOMETRY_TOPIC=$2
+if [ -z "${ODOMETRY_TOPIC}" ] ; then
+  ODOMETRY_TOPIC=mavros/global_position/local
+fi
+
 # get the path to this script
 MY_PATH=`dirname "$0"`
 MY_PATH=`( cd "$MY_PATH" && pwd )`
@@ -23,10 +28,13 @@ source $MY_PATH/shell_scripts.sh
 echo "Automatic takeoff started for $UAV_NAMESPACE UAV"
 waitForRos
 waitForSimulation
-waitForOdometry
 
-echo "UAV $UAV_NAMESPACE switch to GUIDED mode"
-rosservice call /$UAV_NAMESPACE/mavros/set_mode 0 GUIDED >> /dev/null 2>&1
+if [ "$ODOMETRY_TOPIC"="mavros/global_position/local" ] ; then
+  waitForOdometry
+fi
+
+echo "UAV $UAV_NAMESPACE switch to GUIDED_NOGPS mode"
+rosservice call /$UAV_NAMESPACE/mavros/set_mode 0 GUIDED_NOGPS >> /dev/null 2>&1
 waitForCarrot
 
 echo "UAV $UAV_NAMESPACE switch controller to CARROT"
