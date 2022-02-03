@@ -508,7 +508,7 @@
 
     </xacro:macro>
   
-    <xacro:macro name="magnet_plugin" params="parent namespace name moment_x moment_y moment_z length">
+    <xacro:macro name="magnet_plugin" params="parent namespace name moment_x moment_y moment_z length offset">
 
       <joint name="${namespace}/electromagnet_joint" type="fixed">
         <axis xyz="0 1 0" />
@@ -533,7 +533,7 @@
 
         <visual>
           <geometry>
-            <cylinder radius="0.01" length="${length}"/>
+            <cylinder radius="0.01" length="${length + offset}"/>
           </geometry>
         </visual>
       </link>
@@ -547,7 +547,7 @@
 
         <collision name="collision">
           <geometry>
-            <cylinder radius="0.04" length="0.035"/>
+            <cylinder radius="0.08" length="0.035"/>
           </geometry>
         </collision>
 
@@ -555,6 +555,7 @@
           <geometry>
             <cylinder radius="0.08" length="0.035"/>
           </geometry>
+          <origin xyz="0 0 ${-offset/2}" rpy="0 0 0" />
         </visual>
       </link>
 
@@ -568,7 +569,7 @@
           <dipole_moment>${moment_x} ${moment_y} ${moment_z}</dipole_moment>
           <!-- Set to false if not using ROS -->
           <shouldPublish>true</shouldPublish>
-          <topicNs>${name}</topicNs>
+          <topicNs>${namespace}/${name}</topicNs>
           <updateRate>100</updateRate>
           <gain>1.0</gain>
         </plugin>

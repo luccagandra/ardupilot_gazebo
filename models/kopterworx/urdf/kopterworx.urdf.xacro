@@ -70,7 +70,8 @@
       moment_x="0"
       moment_y="0"
       moment_z="50"
-      length="0.25">
+      length="0.25"
+      offset="0.07">
     </xacro:magnet_plugin>
   </xacro:if>
 
