@@ -508,4 +508,72 @@
 
     </xacro:macro>
   
+    <xacro:macro name="magnet_plugin" params="parent namespace name moment_x moment_y moment_z length">
+
+      <joint name="${namespace}/electromagnet_joint" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz="0 0 ${-length}" rpy="0 0 0" />
+        <parent link="${parent}"/>
+        <child link="${namespace}/electromagnet_actuator"/>
+      </joint>
+
+      <joint name="${namespace}/electromagnet_joint_bar" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz="0 0 ${length/2}" rpy="0 0 0"/>
+        <parent link="${namespace}/electromagnet_actuator"/>
+        <child link="${namespace}/electromagnet_bar"/>
+      </joint>
+
+      <link name="${namespace}/electromagnet_bar">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="0.00025"/>
+          <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001" />
+        </inertial>
+
+        <visual>
+          <geometry>
+            <cylinder radius="0.01" length="${length}"/>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="${namespace}/electromagnet_actuator">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <mass value="0.025"/>
+          <inertia ixx="0.0001" ixy="0" ixz="0" iyy ="0.0001" iyz = "0" izz = "0.0001" />
+        </inertial>
+
+        <collision name="collision">
+          <geometry>
+            <cylinder radius="0.04" length="0.035"/>
+          </geometry>
+        </collision>
+
+        <visual>
+          <geometry>
+            <cylinder radius="0.08" length="0.035"/>
+          </geometry>
+        </visual>
+      </link>
+
+       <gazebo reference="${namespace}/electromagnet_actuator">
+        <material>Gazebo/Green</material>
+      </gazebo>
+
+      <gazebo>  
+        <plugin name="dipole_magnet" filename="libstorm_gazebo_dipole_magnet.so">
+          <bodyName>${namespace}/electromagnet_actuator</bodyName>
+          <dipole_moment>${moment_x} ${moment_y} ${moment_z}</dipole_moment>
+          <!-- Set to false if not using ROS -->
+          <shouldPublish>true</shouldPublish>
+          <topicNs>${name}</topicNs>
+          <updateRate>100</updateRate>
+          <gain>1.0</gain>
+        </plugin>
+      </gazebo>
+
+    </xacro:macro>
+
 </robot>
