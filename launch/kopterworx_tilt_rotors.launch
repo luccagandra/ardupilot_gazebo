@@ -6,7 +6,7 @@
   <arg name="y"                   default="0.0"/>
   <arg name="z"                   default="0.5"/>
   <arg name="enable_ground_truth" default="true"/>
-  <arg name="model"               default="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
+  <arg name="model"               default="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_tilt.urdf.xacro" />
   <arg name="world"               default="worlds/empty.world"/>
   <arg name="fdm_port_in"         default="9002"/>
   <arg name="fdm_port_out"        default="9003"/>
@@ -45,20 +45,64 @@
     laser_count:=$(arg laser_count)
 	  "
 	/>
-
-	<node name="robot_state_publisher" pkg="robot_state_publisher"
-    type="robot_state_publisher" ns="$(arg name)"/>
+  
+	
+  
 	
 	<!-- push robot_description to factory and spawn robot in gazebo -->
-	<node name="spawn_robot" pkg="gazebo_ros" type="spawn_model"
-	 args="-param $(arg name)/robot_description
-	       -urdf
-	       -x $(arg x)
-	       -y $(arg y)
-	       -z $(arg z)
-	       -model $(arg name)"
-	 respawn="false" output="screen" >
+	<node name="spawn_robot" 
+        pkg="gazebo_ros" 
+        type="spawn_model"
+	      args="-param $(arg name)/robot_description
+	            -urdf
+	            -x $(arg x)
+	            -y $(arg y)
+	            -z $(arg z)
+	            -model $(arg name)"
+	      respawn="false" output="screen" >
 	</node>
+
+  
+  <!---->
+  <node name="robot_state_publisher" 
+        pkg="robot_state_publisher"
+        type="robot_state_publisher" 
+        output="screen"
+        ns="$(arg name)"
+  />
+  
+
+
+  
+  <rosparam command="load"
+            file="$(find ardupilot_gazebo)/config/kopterworx_joint_state_controller.yaml"
+            ns="$(arg name)"
+  />
+
+  <rosparam command="load"
+            file="$(find ardupilot_gazebo)/config/kopterworx_joint_position_controller.yaml"
+            ns="$(arg name)"
+  />
+  
+  <node name="controller_spawner" 
+        pkg="controller_manager"
+        type="spawner"
+        output="screen"
+        ns="$(arg name)"
+        args="joint_state_controller joint_position_controller"
+  >
+  <remap from="joint_states" to="joint_states_tilt" />
+  </node>
+
+  
+  
+
+
+
+
+
+
+
 
   <!-- Start the rotating velodyne controller -->
 	<group if="$(arg enable_rotating_velodyne)">

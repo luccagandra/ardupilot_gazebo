@@ -4,46 +4,53 @@
 
   <xacro:property name="namespace" value="$(arg namespace)" />
   <xacro:property name="enable_velodyne" value="$(arg enable_velodyne)"/>
-	<xacro:property name="enable_rotating_velodyne" value="$(arg enable_rotating_velodyne)" />
-	<xacro:property name="fdm_port_in" value="$(arg fdm_port_in)"/>
-	<xacro:property name="fdm_port_out" value="$(arg fdm_port_out)"/>
-	<xacro:property name="max_range" value="$(arg max_range)"/>
+  <xacro:property name="enable_magnet" value="$(arg enable_magnet)"/>
+  <xacro:property name="enable_rotating_velodyne" value="$(arg enable_rotating_velodyne)" />
+  <xacro:property name="fdm_port_in" value="$(arg fdm_port_in)"/>
+  <xacro:property name="fdm_port_out" value="$(arg fdm_port_out)"/>
+  <xacro:property name="max_range" value="$(arg max_range)"/>
+  <xacro:property name="laser_count" value="$(arg laser_count)"/>
 	
-	<gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/$(arg namespace)</robotNamespace>
-      <robotParam>/$(arg namespace)/robot_description </robotParam>
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-    </plugin>
+  <gazebo>
+  	<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    	<robotNamespace>/$(arg namespace)</robotNamespace>
+    	<robotParam>/$(arg namespace)/robot_description </robotParam>
+    	<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+  	</plugin>
   </gazebo>
 
-	<xacro:property name="horizontal_velodyne_origin">
-    <origin xyz="0.08 0. -0.1578" rpy="-3.141592653589793 0.1323284641020683 0." />
-	</xacro:property>
+  <xacro:property name="horizontal_velodyne_origin">
+	<origin xyz="0.08 0. -0.1578" rpy="-3.141592653589793 0.1323284641020683 0." />
+  </xacro:property>
 	
-	<xacro:property name="front_facing_camera">
-		<origin xyz="0.2 0 0.05" rpy="0 0 0"/>
-	</xacro:property>
-
-	<xacro:property name="down_facing_camera">
-	  <origin xyz="0 0.2 -0.3" rpy="-1.570796 1.570796 0"/>
-	</xacro:property>
-
-  <xacro:property name="camera_mass" value="1e-5"/>
-	<xacro:property name="camera_size" value="0.05" />
-  <xacro:property name="camera_inertia">
-    <inertia
-    ixx="1e-12"
-    iyy="1e-12"
-    izz="1e-12"
-    ixy="0.0" ixz="0.0" iyz="0.0" />
+  <xacro:property name="front_facing_camera">
+	<origin xyz="0.2 0 0.05" rpy="0 0 0"/>
   </xacro:property>
 
+  <xacro:property name="down_facing_camera">
+    <origin xyz="0 0.2 -0.3" rpy="-1.570796 1.570796 0"/>
+  </xacro:property>
+
+  <xacro:property name="camera_mass" value="1e-5"/>
+  <xacro:property name="camera_size" value="0.05" />
+  <xacro:property name="camera_inertia">
+    <inertia ixx="1e-12" iyy="1e-12" izz="1e-12" ixy="0.0" ixz="0.0" iyz="0.0" />
+  </xacro:property>
+
+
+
+
   <!-- Instantiate kopterworx mechanics "mechanics" -->
-	<xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_base.urdf.xacro" />
+  <xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_tilt_base.urdf.xacro" />
   <xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />
 	
-	<!-- Ardupilot plugin -->
+
+
+
+  <!-- Ardupilot plugin 
+    NOTE: thrust_multiplier 
+      Value is tuned in order for mavros/setpoint_raw/attitude/thrust to reflect real-world behavior. 
+  -->
   <xacro:ardupilot
 		imu_topic="/${namespace}/imu"
 		control_topic="/${namespace}/gazebo/command/motor_speed"
@@ -56,6 +63,23 @@
 		fdm_port_in="${fdm_port_in}"
 		fdm_port_out="${fdm_port_out}">
 	</xacro:ardupilot>
+
+
+
+
+
+  <xacro:if value="${enable_magnet}">
+    <xacro:magnet_plugin 
+      parent="${namespace}/base_link_inertia" 
+      namespace="${namespace}"
+      name="uav_magnet"
+      moment_x="0"
+      moment_y="0"
+      moment_z="50"
+      length="0.25"
+      offset="0.07">
+    </xacro:magnet_plugin>
+  </xacro:if>
 
 	<xacro:if value="${enable_velodyne}">
 
@@ -70,7 +94,7 @@
 				gpu="false"
 				min_range="1" 
 				max_range="${max_range}" 
-				lasers="16">
+				lasers="32">
 				<xacro:insert_block name="horizontal_velodyne_origin"/>
 			</xacro:lidar-x>
 		</xacro:if>
@@ -86,7 +110,7 @@
 				gpu="false"
 				min_range="1"
 				max_range="${max_range}"
-				lasers="16">
+				lasers="32">
 				<xacro:insert_block name="horizontal_velodyne_origin"/>
 			</xacro:lidar-x>
 		</xacro:unless>
