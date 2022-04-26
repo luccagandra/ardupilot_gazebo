@@ -415,6 +415,13 @@
                 <box size="0.01 0.01 0.01" />
                 </geometry>
             </visual> -->
+            <visual>
+              <origin xyz="0 0 0" rpy="0 1.57 0"/>
+              <geometry>
+                <!--box size="${camera_link} ${camera_link} ${camera_link}"/-->
+                <mesh filename="package://ardupilot_gazebo/models/util/asus_xtion_pro_camera.dae" scale="1 1 1" />
+              </geometry>
+            </visual>
         </link>
         <joint name="camera_gimbal_joint" type="continuous">
             <parent link="gimbal_link_4" />
