@@ -337,10 +337,10 @@
     </transmission>
   </xacro:macro>
 
-  <xacro:macro name="gimbal_macro" params="parent *origin">
+  <xacro:macro name="gimbal_macro" params="namespace parent *origin">
         <joint name="gimbal_position" type="fixed">
             <xacro:insert_block name="origin"/>
-            <parent link="base_link"/>
+            <parent link="${namespace}/base_link"/>
             <child link="gimbal_link_1"/>
         </joint>
         <gazebo reference="gimbal_position">

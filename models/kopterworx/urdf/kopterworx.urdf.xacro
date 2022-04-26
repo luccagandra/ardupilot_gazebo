@@ -153,8 +153,10 @@
     <xacro:insert_block name="camera_inertia"/>
   </xacro:cam>
 
-<!--   <xacro:gimbal_macro parent="base_link">
-    <origin xyz="0.25 0 -0.1" rpy="0 0 0"/>
-  </xacro:gimbal_macro> -->
-	
+	<!-- <xacro:gimbal_macro 
+		namespace="$(arg namespace)"
+		parent="${namespace}/base_link">
+	<origin xyz="0.25 0 -0.1" rpy="0 0 0"/>
+	</xacro:gimbal_macro> -->
+
 </robot>
