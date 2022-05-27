@@ -80,16 +80,20 @@
   />
 
   <rosparam command="load"
-            file="$(find ardupilot_gazebo)/config/kopterworx_joint_position_controller.yaml"
+            file="$(find ardupilot_gazebo)/config/kopterworx_joint_position_controllers.yaml"
             ns="$(arg name)"
   />
   
+
   <node name="controller_spawner" 
         pkg="controller_manager"
         type="spawner"
         output="screen"
         ns="$(arg name)"
-        args="joint_state_controller joint_position_controller"
+        args="joint_state_controller 
+              tilt_joints_position_controller 
+              manipulator_COM_position_controller
+              movable_mass_joints_velocity_controller"
   >
   <remap from="joint_states" to="joint_states_tilt" />
   </node>

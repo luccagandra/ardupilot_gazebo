@@ -252,7 +252,7 @@
 
 
   
-  <!-- Instantiate movable mass -->
+  <!-- Instantiate manipulator center of mass -->
   
   <xacro:movable_mass_linear 
     robot_namespace="$(arg namespace)"
@@ -260,7 +260,8 @@
     parent="$(arg namespace)/base_link"
     mass="0.5"
     radius="0.05"
-    path_len="1"
+    limit_low="-0.2"
+    limit_high="0.2"
     color="Yellow"
     x_axis="1"
     y_axis="0"
@@ -268,14 +269,104 @@
     <origin xyz="0 0 -0.15" rpy="0 0 0" />
   </xacro:movable_mass_linear>
 
+  <!-- Instantiate manipulator center of mass transmission -->
 
-
-  <!-- Instantiate movable mass transmission -->
-
-  <xacro:movable_mass_transmission
+  <xacro:movable_mass_pos_transmission
     number="0"
     joint_name="red/movable_mass_joint_0">
-  </xacro:movable_mass_transmission>
+  </xacro:movable_mass_pos_transmission>
+
+
+
+
+
+
+
+  <!-- Instantiate movable masses -->
+  
+  <xacro:movable_mass_linear 
+    robot_namespace="$(arg namespace)"
+    number="1"
+    parent="$(arg namespace)/base_link"
+    mass="0.25"
+    radius="0.03"
+    limit_low="0.2"
+    limit_high="0.5"
+    color="Orange"
+    x_axis="${sin45}"
+    y_axis="${-sin45}"
+    z_axis="0">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:movable_mass_linear>
+
+  <xacro:movable_mass_linear 
+    robot_namespace="$(arg namespace)"
+    number="2"
+    parent="$(arg namespace)/base_link"
+    mass="0.25"
+    radius="0.03"
+    limit_low="0.2"
+    limit_high="0.5"
+    color="Orange"
+    x_axis="${sin45}"
+    y_axis="${sin45}"
+    z_axis="0">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:movable_mass_linear>
+
+  <xacro:movable_mass_linear 
+    robot_namespace="$(arg namespace)"
+    number="3"
+    parent="$(arg namespace)/base_link"
+    mass="0.25"
+    radius="0.03"
+    limit_low="0.2"
+    limit_high="0.5"
+    color="Orange"
+    x_axis="${-sin45}"
+    y_axis="${sin45}"
+    z_axis="0">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:movable_mass_linear>
+
+  <xacro:movable_mass_linear 
+    robot_namespace="$(arg namespace)"
+    number="4"
+    parent="$(arg namespace)/base_link"
+    mass="0.25"
+    radius="0.03"
+    limit_low="0.2"
+    limit_high="0.5"
+    color="Orange"
+    x_axis="${-sin45}"
+    y_axis="${-sin45}"
+    z_axis="0">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:movable_mass_linear>
+
+
+
+  <!-- Instantiate movable masses transmissions -->
+
+  <xacro:movable_mass_vel_transmission
+    number="1"
+    joint_name="red/movable_mass_joint_1">
+  </xacro:movable_mass_vel_transmission>
+
+  <xacro:movable_mass_vel_transmission
+    number="2"
+    joint_name="red/movable_mass_joint_2">
+  </xacro:movable_mass_vel_transmission>
+
+  <xacro:movable_mass_vel_transmission
+    number="3"
+    joint_name="red/movable_mass_joint_3">
+  </xacro:movable_mass_vel_transmission>
+
+  <xacro:movable_mass_vel_transmission
+    number="4"
+    joint_name="red/movable_mass_joint_4">
+  </xacro:movable_mass_vel_transmission>
   
 
 

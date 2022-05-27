@@ -42,14 +42,14 @@
   <!-- Macro for movable mass on a straight line. -->
   
   <xacro:macro name="movable_mass_linear" 
-    params="robot_namespace number parent mass radius path_len color x_axis y_axis z_axis *origin">
+    params="robot_namespace number parent mass radius limit_low limit_high color x_axis y_axis z_axis *origin">
 
     <joint name="${robot_namespace}/movable_mass_joint_${number}" type="prismatic">
       <xacro:insert_block name="origin"/>
       <axis xyz="${x_axis} ${y_axis} ${z_axis}"/>
       <parent link="${parent}"/>
       <child link="${robot_namespace}/movable_mass_link_${number}"/>
-      <limit lower="${-path_len/2}" upper="${path_len/2}" effort="10000" velocity="20"/>
+      <limit lower="${limit_low}" upper="${limit_high}" effort="10000" velocity="20"/>
     </joint>
 
     <link name="${robot_namespace}/movable_mass_link_${number}">
@@ -93,14 +93,26 @@
     </transmission>
   </xacro:macro>
 
-  <xacro:macro name="movable_mass_transmission" params="number joint_name">
-    <transmission name="movable_mass_transmission_${number}">
+  <xacro:macro name="movable_mass_pos_transmission" params="number joint_name">
+    <transmission name="movable_mass_pos_transmission_${number}">
       <type>transmission_interface/SimpleTransmission</type>
       <actuator name="movable_mass_motor_${number}">
         <mechanicalReduction>1</mechanicalReduction>
       </actuator>
       <joint name="${joint_name}">
         <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:macro name="movable_mass_vel_transmission" params="number joint_name">
+    <transmission name="movable_mass_vel_transmission_${number}">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="movable_mass_motor_${number}">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
     </transmission>
   </xacro:macro>
