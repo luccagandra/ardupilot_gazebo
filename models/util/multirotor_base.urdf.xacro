@@ -578,7 +578,7 @@
           <shouldPublish>true</shouldPublish>
           <topicNs>${namespace}/${name}</topicNs>
           <updateRate>100</updateRate>
-          <gain>1.0</gain>
+          <gain>10.0</gain>
         </plugin>
       </gazebo>
 
