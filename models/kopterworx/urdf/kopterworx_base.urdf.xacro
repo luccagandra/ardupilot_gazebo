@@ -30,6 +30,10 @@
   <xacro:property name="rotor_drag_coefficient" value="8.06428e-05" />
   <xacro:property name="rolling_moment_coefficient" value="0.000001" />
 
+  <!-- Collision bitmask - By default collides with everything -->
+  <xacro:arg name="collision_bitmask" default="-1" />
+  <xacro:property name="collision_bitmask" value="$(arg collision_bitmask)" />
+
   <!-- Property Blocks -->
   <xacro:property name="body_inertia">  
     <inertia ixx="0.303755" ixy="0.0004484919" ixz="0.0010159727" iyy="0.27722" iyz="-0.001806885" izz="0.469164" />
@@ -142,6 +146,13 @@
 
   <gazebo reference="$(arg namespace)/base_link">
     <dampingFactor>0.001</dampingFactor>
+    <collision>
+      <surface>
+        <contact>
+          <collide_bitmask>${collision_bitmask}</collide_bitmask>
+        </contact>
+      </surface>
+    </collision>
   </gazebo>
 
 </robot>

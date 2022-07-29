@@ -11,6 +11,9 @@
 	<arg name="model" value="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx.urdf.xacro" />
 	<arg name="fdm_port_in" default="9012"/>
 	<arg name="fdm_port_out" default="9013"/>
+	
+	<!-- Collision bitmask - by default collide with everything -->
+  <arg name="collision_bitmask" default="-1" />
 
   <!-- send the robot XML to param server -->
 	<param name="$(arg name)/robot_description" command="
@@ -20,6 +23,7 @@
 		enable_rotating_velodyne:=$(arg enable_rotating_velodyne)
 		fdm_port_in:=$(arg fdm_port_in)
 		fdm_port_out:=$(arg fdm_port_out)
+		collision_bitmask:=$(arg collision_bitmask)
 	  "
 	/>
 
