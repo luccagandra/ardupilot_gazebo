@@ -106,3 +106,4 @@ CATKIN_IGNORE
 *.TXT
 *.bin
 *.DAT
+*.swp
