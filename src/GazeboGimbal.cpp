@@ -26,7 +26,7 @@ void GazeboGimbal::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   node_handle_ = std::make_unique<ros::NodeHandle>("gimbal_controller");
 
   // Create a named topic, and subscribe to it.
-  auto sub_options = ros::SubscribeOptions::create<geometry_msgs::Vector3>(
+  auto sub_options = ros::SubscribeOptions::create<geometry_msgs::Vector3Stamped>(
     "/" + _model->GetName() + "/gimbal/euler_ref",
     1,
     boost::bind(&GazeboGimbal::control_callback, this, _1),
@@ -56,7 +56,7 @@ void GazeboGimbal::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   ros_queue_thread_ = std::thread(std::bind(&GazeboGimbal::ros_queue, this));
 }
 
-void GazeboGimbal::control_callback(const geometry_msgs::Vector3ConstPtr &msg)
+void GazeboGimbal::control_callback(const geometry_msgs::Vector3StampedConstPtr &msg)
 {
   control_input_ = *msg;
 }
@@ -83,8 +83,8 @@ void GazeboGimbal::Update()
   double roll_c = std::acos(2 * y * z + 2 * x * w) - M_PI / 2;
 
   joints_[YAW]->SetPosition(0, 0);
-  joints_[PITCH]->SetPosition(0, pitch_c + control_input_.y);
-  joints_[ROLL]->SetPosition(0, roll_c + control_input_.x);
+  joints_[PITCH]->SetPosition(0, pitch_c + control_input_.vector.y);
+  joints_[ROLL]->SetPosition(0, roll_c + control_input_.vector.x);
 }
 
 GZ_REGISTER_MODEL_PLUGIN(GazeboGimbal);

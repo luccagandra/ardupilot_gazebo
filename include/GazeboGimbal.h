@@ -7,7 +7,7 @@
 #include <ros/callback_queue.h>
 #include <ros/ros.h>
 
-#include <geometry_msgs/Vector3.h>
+#include <geometry_msgs/Vector3Stamped.h>
 
 namespace gazebo {
 
@@ -23,20 +23,20 @@ protected:
   virtual void Update();
 
 private:
-      std::string namespace_;
+  std::string namespace_;
 
-      /* ROS stuff */
-      std::unique_ptr<ros::NodeHandle> node_handle_;
+  /* ROS stuff */
+  std::unique_ptr<ros::NodeHandle> node_handle_;
 
-      // Control input subscriber + Callback queue
-      ros::CallbackQueue callback_queue_;
-      ros::Subscriber control_sub_;
-      geometry_msgs::Vector3 control_input_;
-      void control_callback(const geometry_msgs::Vector3ConstPtr &msg);
+  // Control input subscriber + Callback queue
+  ros::CallbackQueue callback_queue_;
+  ros::Subscriber control_sub_;
+  geometry_msgs::Vector3Stamped control_input_;
+  void control_callback(const geometry_msgs::Vector3StampedConstPtr &msg);
 
-      // ROS callback queue processing
-      std::thread ros_queue_thread_;
-      void ros_queue();
+  // ROS callback queue processing
+  std::thread ros_queue_thread_;
+  void ros_queue();
 
   std::vector<physics::JointPtr> joints_;
   physics::LinkPtr link;
