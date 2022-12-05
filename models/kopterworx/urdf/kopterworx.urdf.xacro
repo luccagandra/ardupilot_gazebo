@@ -62,7 +62,7 @@
     rotor_1_joint="${namespace}::${namespace}/rotor_1_joint"
     rotor_2_joint="${namespace}::${namespace}/rotor_2_joint"
     rotor_3_joint="${namespace}::${namespace}/rotor_3_joint"
-    thrust_multiplier="600"
+    thrust_multiplier="667"
     fdm_port_in="${fdm_port_in}"
     fdm_port_out="${fdm_port_out}">
   </xacro:ardupilot>
