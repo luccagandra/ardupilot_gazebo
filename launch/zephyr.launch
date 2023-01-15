@@ -7,7 +7,7 @@
   <arg name="z"                   default="0.5"/>
   <arg name="enable_ground_truth" default="true"/>
   <arg name="model"               default="$(find ardupilot_gazebo)/models/zephyr_delta_wing/urdf/zephyr.urdf.xacro" />
-  <arg name="world"               default="worlds/empty.world"/>
+  <arg name="world"               default="$(find ardupilot_gazebo)/worlds/runway.world"/>
   <arg name="fdm_port_in"         default="9002"/>
   <arg name="fdm_port_out"        default="9003"/>
   <arg name="use_sim_time"        default="true"/>
