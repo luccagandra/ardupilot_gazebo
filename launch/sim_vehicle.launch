@@ -2,7 +2,7 @@
 
   <arg name="name"                  default="kopterworx"/>
   <arg name="id"                    default="1"/>
-  <arg name="parm_file"             default="$(find ardupilot_gazebo)/config/zephyr.parm"/>
+  <arg name="parm_file"             default="$(find ardupilot_gazebo)/config/kopterworx_red.parm"/>
   <arg name="enable_console"        default="true"/>
   <arg name="enable_map"            default="false"/>
   <arg name="streamrate"            default="50"/>
