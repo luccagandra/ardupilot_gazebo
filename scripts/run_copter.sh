@@ -18,10 +18,11 @@ ENABLE_CONSOLE=$4
 ENABLE_MAP=$5
 STREAMRATE=$6
 FRAME=$7
+BINARY=$8
 
 # Get valid additional arguments
 ADDITIONAL_ARGS=""
-for arg in "${@:8:99}"
+for arg in "${@:9:99}"
 do
   if [[ ! $arg = __* ]]; then
     echo "[run_copter.sh] Found valid argument: $arg"
@@ -53,6 +54,10 @@ if [ -z "${FRAME}" ] ; then
   FRAME="gazebo-iris"
 fi
 
+if [ -z "${BINARY}" ]; then
+  BINARY="ArduCopter"
+fi
+
 # Navigate to the startup folder
 STARTUP_DIR="$HOME/Documents/${VEHICLE_NAME}_${VEHICLE_ID}_startup"
 mkdir -p $STARTUP_DIR
@@ -74,5 +79,5 @@ SYSID_THISMAV ${VEHICLE_ID}
 EOF
 
 cat ${PARAM_PATH} >> ${IDENTITY_PATH}
-echo "sim_vehicle.py -v ArduCopter --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m \"--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
-sim_vehicle.py -v ArduCopter --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m "--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
+echo "sim_vehicle.py -v ${BINARY} --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m \"--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
+sim_vehicle.py -v ${BINARY} --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m "--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
