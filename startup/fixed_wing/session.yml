@@ -13,6 +13,7 @@ windows:
           binary:=ArduPlane
           frame:=gazebo-zephyr
           name:=zephyr
+          parm_file:=$(rospack find ardupilot_gazebo)/config/zephyr.parm
         - waitForRos; rosparam set use_sim_time true; roslaunch ardupilot_gazebo mavros.launch 
   - gazebo:
       layout: tiled
