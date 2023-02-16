@@ -29,6 +29,9 @@
   <!-- Collision bitmask - by default collide with everything -->
   <arg name="collision_bitmask" default="-1" />
 
+  <!-- Actuators -->
+  <arg name="enable_tilt_rotors" default="false" />
+
   <!-- send the robot XML to param server -->
 	<param name="$(arg name)/robot_description" command="
 	  $(find xacro)/xacro --inorder $(arg model)
@@ -42,6 +45,7 @@
     max_range:=$(arg max_range)
     laser_count:=$(arg laser_count)
     collision_bitmask:=$(arg collision_bitmask)
+    enable_tilt_rotors:=$(arg enable_tilt_rotors)
 	  "
 	/>
 
@@ -64,6 +68,27 @@
     <include file="$(find velodyne_gazebo_plugins)/launch/velodyne_controller.launch">
       <arg name="namespace" value="$(env UAV_NAMESPACE)"/>
     </include>
+    </group>
+
+  <!-- Setup the tilt control -->
+  <group if="$(arg enable_tilt_rotors)">
+    <rosparam command="load"
+          file="$(find ardupilot_gazebo)/config/kopterworx_joint_state_controller.yaml"
+          ns="$(arg name)"/>
+
+    <rosparam command="load"
+            file="$(find ardupilot_gazebo)/config/kopterworx_joint_position_tilt_controller.yaml"
+            ns="$(arg name)"/>
+
+    <node name="controller_spawner" 
+        pkg="controller_manager"
+        type="spawner"
+        output="screen"
+        ns="$(arg name)"
+        args="joint_state_controller 
+              tilt_joints_position_controller">
+      <remap from="joint_states" to="joint_states_tilt" />
+    </node>
   </group>
 
 </launch>

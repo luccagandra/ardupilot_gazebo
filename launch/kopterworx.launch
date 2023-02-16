@@ -29,6 +29,9 @@
   <!-- Collision bitmask - by default collide with everything -->
   <arg name="collision_bitmask" default="-1" />
 
+  <!-- Actuators -->
+  <arg name="enable_tilt_rotors" default="false" />
+
   <!-- Spawn the world -->
   <include file="$(find ardupilot_gazebo)/launch/empty_world.launch">
     <arg name="paused"          value="false" />
@@ -69,6 +72,10 @@
 
     <!-- Collision bitmask - by value collide with everything -->
     <arg name="collision_bitmask" value="$(arg collision_bitmask)" />
+
+    <!-- Actuators -->
+    <arg name="enable_tilt_rotors" value="$(arg enable_tilt_rotors)" />
+
   </include>
 
 </launch>

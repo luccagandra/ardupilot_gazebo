@@ -23,6 +23,9 @@
   <!-- Magnet properties - requires storm_gazebo_ros_magnet-->
   <arg name="enable_magnet"   default="false" />
 
+  <!-- Collision bitmask - by default collide with everything -->
+  <arg name="collision_bitmask" default="-1" />
+
   <include file="$(find ardupilot_gazebo)/launch/empty_world.launch">
     <arg name="paused"          value="false" />
     <arg name="use_sim_time"    value="$(arg use_sim_time)"/>
@@ -43,6 +46,7 @@
 		fdm_port_out:=$(arg fdm_port_out)
 		max_range:=$(arg max_range)
     laser_count:=$(arg laser_count)
+    collision_bitmask:=$(arg collision_bitmask)
 	  "
 	/>
   
