@@ -8,6 +8,7 @@
   <xacro:property name="enable_gimbal" value="$(arg enable_gimbal)"/>
   <xacro:property name="enable_rotating_velodyne" value="$(arg enable_rotating_velodyne)" />
   <xacro:property name="enable_tilt_rotors" value="$(arg enable_tilt_rotors)"/>
+  <xacro:property name="enable_simple_manipulator" value="$(arg enable_simple_manipulator)"/>
   <xacro:property name="fdm_port_in" value="$(arg fdm_port_in)"/>
   <xacro:property name="fdm_port_out" value="$(arg fdm_port_out)"/>
   <xacro:property name="max_range" value="$(arg max_range)"/>
@@ -57,6 +58,40 @@
   <!-- Setup tilt quadrotor -->
   <xacro:if value="${enable_tilt_rotors}">
     <xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_tilt_base.urdf.xacro" />
+  </xacro:if>
+
+  <xacro:if value="${enable_simple_manipulator}">
+    <xacro:include filename="$(find ardupilot_gazebo)/models/util/multirotor_movable_masses.urdf.xacro"/>
+
+    <!-- Instantiate manipulator center of mass -->
+    <xacro:simple_manipulator 
+      robot_namespace="$(arg namespace)"
+      number="0"
+      parent="$(arg namespace)/base_link"
+      mass="1.0"
+      radius="0.05"
+      limit_low="-0.5"
+      limit_high="0.5"
+      color="Yellow">
+      <origin xyz="0 0 -0.125" rpy="0 0 0" />
+    </xacro:simple_manipulator>
+
+    <!-- Instantiate manipulator center of mass transmission -->
+    <xacro:movable_mass_pos_transmission
+      number="0"
+      joint_name="red/movable_mass_x_joint_0">
+    </xacro:movable_mass_pos_transmission>
+
+    <xacro:movable_mass_pos_transmission
+      number="1"
+      joint_name="red/movable_mass_y_joint_0">
+    </xacro:movable_mass_pos_transmission>
+
+    <xacro:movable_mass_pos_transmission
+      number="2"
+      joint_name="red/movable_mass_z_joint_0">
+    </xacro:movable_mass_pos_transmission>
+
   </xacro:if>
 
   <xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />

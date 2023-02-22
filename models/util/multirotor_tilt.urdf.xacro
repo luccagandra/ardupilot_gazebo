@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  
-
-
 
   <!-- Macro for propeler tilting joint and link.-->
 
@@ -37,48 +34,6 @@
     </link>
   </xacro:macro>
 
-
-
-  <!-- Macro for movable mass on a straight line. -->
-  
-  <xacro:macro name="movable_mass_linear" 
-    params="robot_namespace number parent mass radius limit_low limit_high color x_axis y_axis z_axis *origin">
-
-    <joint name="${robot_namespace}/movable_mass_joint_${number}" type="prismatic">
-      <xacro:insert_block name="origin"/>
-      <axis xyz="${x_axis} ${y_axis} ${z_axis}"/>
-      <parent link="${parent}"/>
-      <child link="${robot_namespace}/movable_mass_link_${number}"/>
-      <limit lower="${limit_low}" upper="${limit_high}" effort="10000" velocity="20"/>
-    </joint>
-
-    <link name="${robot_namespace}/movable_mass_link_${number}">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <sphere radius="${radius}"/>
-        </geometry>
-      </visual>
-      
-      <inertial>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <mass value="${mass}"/>
-        <inertia
-            ixx="${2/5 * mass * radius * radius}"     ixy="0.0"                                  ixz="0.0"
-            iyx="0.0"                                 iyy="${2/5 * mass * radius * radius}"      iyz="0.0"
-            izx="0.0"                                 izy="0.0"                                  izz="${2/5 * mass * radius * radius}" />
-      </inertial>
-    </link>
-
-    <gazebo reference="${robot_namespace}/movable_mass_link_${number}">
-      <material>Gazebo/${color}</material>
-    </gazebo>
-  </xacro:macro>
-
-
-
-
-
   <!-- We add a <transmission> block for every joint that we wish to actuate. -->
 
   <xacro:macro name="tilt_joint_transmission" params="number joint_name">
@@ -92,32 +47,5 @@
       </joint>
     </transmission>
   </xacro:macro>
-
-  <xacro:macro name="movable_mass_pos_transmission" params="number joint_name">
-    <transmission name="movable_mass_pos_transmission_${number}">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="movable_mass_motor_${number}">
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-      <joint name="${joint_name}">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-      </joint>
-    </transmission>
-  </xacro:macro>
-
-  <xacro:macro name="movable_mass_vel_transmission" params="number joint_name">
-    <transmission name="movable_mass_vel_transmission_${number}">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="movable_mass_motor_${number}">
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-      <joint name="${joint_name}">
-        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-    </transmission>
-  </xacro:macro>
-
-  
-
 
 </robot>

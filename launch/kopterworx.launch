@@ -30,7 +30,8 @@
   <arg name="collision_bitmask" default="-1" />
 
   <!-- Actuators -->
-  <arg name="enable_tilt_rotors" default="false" />
+  <arg name="enable_tilt_rotors"        default="false" />
+  <arg name="enable_simple_manipulator" default="false" />
 
   <!-- Spawn the world -->
   <include file="$(find ardupilot_gazebo)/launch/empty_world.launch">
@@ -74,7 +75,8 @@
     <arg name="collision_bitmask" value="$(arg collision_bitmask)" />
 
     <!-- Actuators -->
-    <arg name="enable_tilt_rotors" value="$(arg enable_tilt_rotors)" />
+    <arg name="enable_tilt_rotors"        default="$(arg enable_tilt_rotors)" />
+    <arg name="enable_simple_manipulator" default="$(arg enable_simple_manipulator)" />
 
   </include>
 
