@@ -47,7 +47,7 @@
   </xacro:property>
 
   <!-- Instantiate kopterworx mechanics "mechanics" -->
-  <xacro:include filename="$(find ardupilot_gazebo)/models/kopterworx/urdf/kopterworx_base.urdf.xacro" />
+  <xacro:include filename="$(find ardupilot_gazebo)/models/hawk/urdf/hawk_base.urdf.xacro" />
   <xacro:include filename="$(find rotors_description)/urdf/component_snippets.xacro" />
   
   <!-- Ardupilot plugin 
@@ -132,9 +132,9 @@
     measurement_divisor="20"
     measurement_delay="0"
     unknown_delay="0.0"
-    noise_normal_position="0.0 0.0 0.0"
+    noise_normal_position="0.02 0.02 0.02"
     noise_normal_quaternion="0.0 0.0 0.0"
-    noise_normal_linear_velocity="0.0 0.0 0.0"
+    noise_normal_linear_velocity="0.05 0.05 0.05"
     noise_normal_angular_velocity="0.0 0.0 0.0"
     noise_uniform_position="0.0 0.0 0.0"
     noise_uniform_quaternion="0.0 0.0 0.0"
