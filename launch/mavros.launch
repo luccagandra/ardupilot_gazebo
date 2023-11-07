@@ -13,18 +13,18 @@
 	<arg name="respawn_mavros" default="false" />
 	<arg name="config_file" default="$(find ardupilot_gazebo)/config/apm_config_NAMESPACE.yaml" />
 	
-<include file="$(find ardupilot_gazebo)/launch/mavros_node.launch">
-	<arg name="pluginlists_yaml" value="$(find ardupilot_gazebo)/config/apm_pluginlists.yaml" />
-	<arg name="config_yaml" value="$(arg config_file)" />
-	
-	<arg name="namespace" value="$(arg namespace)"/>
-	<arg name="fcu_url" value="$(arg fcu_url)" />
-	<arg name="gcs_url" value="$(arg gcs_url)" />
-	<arg name="tgt_system" value="$(arg tgt_system)" />
-	<arg name="tgt_component" value="$(arg tgt_component)" />
-	<arg name="log_output" value="$(arg log_output)" />
-	<arg name="fcu_protocol" value="$(arg fcu_protocol)" />
-	<arg name="respawn_mavros" default="$(arg respawn_mavros)" />
-</include>
+	<include file="$(find ardupilot_gazebo)/launch/mavros_node.launch">
+		<arg name="pluginlists_yaml" value="$(find ardupilot_gazebo)/config/apm_pluginlists.yaml" />
+		<arg name="config_yaml" value="$(arg config_file)" />
+		
+		<arg name="namespace" value="$(arg namespace)"/>
+		<arg name="fcu_url" value="$(arg fcu_url)" />
+		<arg name="gcs_url" value="$(arg gcs_url)" />
+		<arg name="tgt_system" value="$(arg tgt_system)" />
+		<arg name="tgt_component" value="$(arg tgt_component)" />
+		<arg name="log_output" value="$(arg log_output)" />
+		<arg name="fcu_protocol" value="$(arg fcu_protocol)" />
+		<arg name="respawn_mavros" default="$(arg respawn_mavros)" />
+	</include>
 
 </launch>
