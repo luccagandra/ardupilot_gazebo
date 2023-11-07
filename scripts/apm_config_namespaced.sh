@@ -8,7 +8,7 @@ NAMESPACE=$2
 
 [ -z "${NAMESPACE}" ] && NAMESPACE="red"
 [ -z "${FROM}" ] && FROM=$(rospack find ardupilot_gazebo)/config/apm_config_NAMESPACE.yaml
-TO=$(rospack find ardupilot_gazebo)/config/apm_config_NAMESPACE_$NAMESPACE.yaml
+TO=$(rospack find ardupilot_gazebo)/config/apm_config_NAMESPACE.yaml_$NAMESPACE
 
 sed s/NAMESPACE/$NAMESPACE/ $FROM | tee $TO
 

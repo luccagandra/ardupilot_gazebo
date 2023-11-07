@@ -11,7 +11,10 @@
 	<arg name="log_output" default="screen" />
 	<arg name="fcu_protocol" default="v2.0" />
 	<arg name="respawn_mavros" default="false" />
-	<arg name="config_file" default="$(find ardupilot_gazebo)/config/apm_config_NAMESPACE.yaml" />
+
+	<arg name="generated_config" default="false" />
+  <arg     if="$(arg generated_config)" name="config_file" value="$(find ardupilot_gazebo)/config/apm_config_NAMESPACE.yaml_$(arg namespace)" />
+  <arg unless="$(arg generated_config)" name="config_file" value="$(find ardupilot_gazebo)/config/apm_config_NAMESPACE.yaml" />
 	
 	<include file="$(find ardupilot_gazebo)/launch/mavros_node.launch">
 		<arg name="pluginlists_yaml" value="$(find ardupilot_gazebo)/config/apm_pluginlists.yaml" />
