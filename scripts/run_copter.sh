@@ -4,6 +4,8 @@
 # Exit immediatelly if a command exits with a non-zero status
 set -e
 
+set -x
+
 # Executes a command when DEBUG signal is emitted in this script - should be after every line
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 
