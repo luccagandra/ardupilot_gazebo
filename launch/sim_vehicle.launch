@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="name"                  default="kopterworx"/>
+  <arg name="name"                  default="red"/>
   <arg name="id"                    default="1"/>
   <arg name="parm_file"             default="$(find ardupilot_gazebo)/config/kopterworx_v432.params"/>
   <arg name="enable_console"        default="true"/>
@@ -8,7 +8,7 @@
   <arg name="streamrate"            default="50"/>
   <arg name="frame"                 default="gazebo-iris"/>
   <arg name="node_start_delay"      default="1.0" />
-  <arg name="additional_arguments"  default="" />
+  <arg name="additional_arguments"  default=""/>
   <arg name="binary"                default="ArduCopter"/>
   <arg name="debug"                 default="false"/>
 
