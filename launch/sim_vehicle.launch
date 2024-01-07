@@ -1,8 +1,8 @@
 <launch>
 
-  <arg name="name"                  default="red"/>
+  <arg name="name"                  default="icts_uav"/>
   <arg name="id"                    default="1"/>
-  <arg name="parm_file"             default="$(find ardupilot_gazebo)/config/kopterworx_v432.params"/>
+  <arg name="parm_file"             default="$(find ardupilot_gazebo)/config/kopterworx_red_autotuned.params"/>
   <arg name="enable_console"        default="true"/>
   <arg name="enable_map"            default="false"/>
   <arg name="streamrate"            default="50"/>

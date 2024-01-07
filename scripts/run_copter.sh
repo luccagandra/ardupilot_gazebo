@@ -88,5 +88,5 @@ EOF
 
 
 cat ${PARAM_PATH} >> ${IDENTITY_PATH}
-echo "sim_vehicle.py ${DEBUG_ARGS} -v ${BINARY} --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m \"--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
-sim_vehicle.py  ${DEBUG_ARGS} -v ${BINARY} --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m "--mav10 --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
+echo "sim_vehicle.py ${DEBUG_ARGS} -v ${BINARY} --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m \" --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}\" ${SIM_VEHICLE_ARGS}"
+sim_vehicle.py  ${DEBUG_ARGS} -v ${BINARY} --add-param-file=${IDENTITY_PATH} -f ${FRAME} -I$((${VEHICLE_ID} - 1)) -m " --streamrate=${STREAMRATE} --target-system=${VEHICLE_ID}" ${SIM_VEHICLE_ARGS}
